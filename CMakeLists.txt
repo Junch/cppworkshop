@@ -45,7 +45,8 @@ LINK_DIRECTORIES("${DEPS_ROOT}/lib64")
 
 #SET_TARGET_PROPERTIES(mylib PROPERTIES DEBUG_POSTFIX "d")
 
-ADD_EXECUTABLE(MainTest ${PROJECT_SOURCE_DIR}/src/main.cpp)
+FILE(GLOB TEST_SRC ${PROJECT_SOURCE_DIR}/src/*.cpp)
+ADD_EXECUTABLE(MainTest ${TEST_SRC})
 ADD_DEPENDENCIES(MainTest "googletest.git")
 TARGET_LINK_LIBRARIES(MainTest 
                       debug gtestd       optimized gtest
