@@ -3,6 +3,11 @@
 This repository contains an example of use of Cmake and [GoogleMock](https://code.google.com/p/googletest/downloads/detail?name=gmock-1.7.0.zip) for a C++ file.
 It is mostly for personal use.
 
+## Prerequisite
+
+- cmake should be installed
+- lcov should be installed on Mac: `brew install lcov` 
+
 ## Use
 
 ```bash
