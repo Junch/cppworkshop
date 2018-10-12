@@ -1,6 +1,5 @@
 ﻿#include <gtest/gtest.h>
 #include <vector>
-using namespace std;
 
 namespace variadic_template
 {
