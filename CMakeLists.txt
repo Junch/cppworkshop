@@ -21,36 +21,25 @@ IF (coverage)
 ENDIF()
 
 SET(CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR}/CMakeModules ${CMAKE_MODULE_PATH})
-GET_FILENAME_COMPONENT(DEPS_ROOT "${PROJECT_BINARY_DIR}/ThirdParty" ABSOLUTE)
-
 FIND_PACKAGE(Threads)
 
-INCLUDE(ExtProjectUtils)
+###############################################################################
+# Title: Override option in CMake subproject
+# Web: https://stackoverflow.com/questions/14061605/override-option-in-cmake-subproject
+##############################################################################
+OPTION(gtest_force_shared_crt "" ON)
 
-IF(WIN32)
-    set(_OPT_CMAKE_ARGS "-Dgtest_force_shared_crt=ON;-DCMAKE_SH=CMAKE_SH-NOTFOUND")
-ELSE()
-    set(_OPT_CMAKE_ARGS "")
-ENDIF()
-
-# Will download external CMakeable project from git repo, branch "master" and install it in $DEPS_ROOT
-# This also will create "googletest.git" target, which we'll use as dependency for our test project
-ExtProjectGit("https://github.com/google/googletest.git" "master" ${DEPS_ROOT} CMAKE_ARGS "${_OPT_CMAKE_ARGS}")
-
-INCLUDE_DIRECTORIES("${DEPS_ROOT}/include")
-LINK_DIRECTORIES("${DEPS_ROOT}/lib")
-LINK_DIRECTORIES("${DEPS_ROOT}/lib64")
-
-#set(CMAKE_DEBUG_POSTFIX d)
-
-#SET_TARGET_PROPERTIES(mylib PROPERTIES DEBUG_POSTFIX "d")
+###############################################################################
+# Title: When should I use add_subdirectory and when ExternalProject
+# Web: https://cmake.org/pipermail/cmake/2013-February/053429.html
+###############################################################################
+ADD_SUBDIRECTORY(3rd-party/googletest EXCLUDE_FROM_ALL)
+INCLUDE_DIRECTORIES(3rd-party/googletest/googletest/include)
+INCLUDE_DIRECTORIES(3rd-party/googletest/googlemock/include)
 
 FILE(GLOB TEST_SRC ${PROJECT_SOURCE_DIR}/src/*.cpp)
 ADD_EXECUTABLE(MainTest ${TEST_SRC})
-ADD_DEPENDENCIES(MainTest "googletest.git")
-TARGET_LINK_LIBRARIES(MainTest 
-                      debug gtestd       optimized gtest
-                      debug gtest_maind  optimized gtest_main)
+TARGET_LINK_LIBRARIES(MainTest gtest gtest_main)
 TARGET_LINK_LIBRARIES(MainTest ${CMAKE_THREAD_LIBS_INIT})
 
 # Code Coverage
