@@ -1,5 +1,6 @@
 #include <gtest/gtest.h>
 #include <string>
+#include <memory>
 
 namespace function_signature
 {
