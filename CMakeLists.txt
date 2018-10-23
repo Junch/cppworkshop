@@ -1,12 +1,8 @@
-CMAKE_MINIMUM_REQUIRED(VERSION 2.8.7 FATAL_ERROR)
-PROJECT(Test)
+cmake_minimum_required(VERSION 3.1.0 FATAL_ERROR)
+PROJECT(Test VERSION 1.0.0 LANGUAGES CXX)
 
 # Required for gCov
 OPTION(coverage "Built with the gCov/lcov support." OFF)
-
-ADD_DEFINITIONS(
-  -std=c++11
-)
 
 IF (coverage)
   SET(CMAKE_BUILD_TYPE Debug)
@@ -39,6 +35,15 @@ INCLUDE_DIRECTORIES(3rd-party/googletest/googlemock/include)
 
 FILE(GLOB TEST_SRC ${PROJECT_SOURCE_DIR}/src/*.cpp)
 ADD_EXECUTABLE(MainTest ${TEST_SRC})
+###############################################################################
+# Title: Enabling C++11 And Later In CMake
+# Web: https://crascit.com/2015/03/28/enabling-cxx11-in-cmake
+###############################################################################
+SET_TARGET_PROPERTIES(MainTest PROPERTIES 
+  CXX_STANDARD 14
+  CXX_STANDARD_PROPERTIES YES
+  CXX_EXTENSIONS NO)
+
 TARGET_LINK_LIBRARIES(MainTest gtest gtest_main)
 TARGET_LINK_LIBRARIES(MainTest ${CMAKE_THREAD_LIBS_INIT})
 

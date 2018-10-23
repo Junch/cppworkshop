@@ -13,49 +13,51 @@ namespace thread_pool
 //      https://github.com/lzpong/threadpool
 ///////////////////////////////////////////////////////////////////////////////
 
-class threadpool
+class ThreadPool
 {
     using Task = std::function<void()>;
-    std::vector<std::thread> pool;
-    std::queue<Task> tasks;
-    std::mutex m_lock;
-    std::condition_variable cv_task;
-    std::atomic<bool> stoped;
-    std::atomic<int> idlThrNum;
+    std::vector<std::thread> pool_;
+    std::queue<Task> tasks_;
+    std::mutex task_lock_;
+    std::condition_variable task_cv_;
+    std::atomic<bool> stoped_;
+    std::atomic<int> idlThrNum_;
 
   public:
-    inline threadpool(unsigned short size = 4) : stoped{false}
+    inline ThreadPool(unsigned short size = 4) : stoped_{false}
     {
-        idlThrNum = size < 1 ? 1 : size;
-        for (size = 0; size < idlThrNum; ++size)
+        idlThrNum_ = size < 1 ? 1 : size;
+        for (size = 0; size < idlThrNum_; ++size)
         {
-            pool.emplace_back([this] {
-                while (!this->stoped)
+            pool_.emplace_back([this] {
+                while (!this->stoped_)
                 {
                     std::function<void()> task;
                     {
-                        std::unique_lock<std::mutex> lock{this->m_lock};
-                        this->cv_task.wait(lock, [this] {
-                            return (this->stoped.load() || !this->tasks.empty());
+                        std::unique_lock<std::mutex> lock{task_lock_};
+                        task_cv_.wait(lock, [this] {
+                            return (stoped_.load() || !tasks_.empty());
                         }); // wait till there is task or stoped
-                        if (this->stoped && this->tasks.empty())
+                        if (stoped_ && tasks_.empty())
+                        {
                             return;
-                        task = std::move(this->tasks.front());
-                        this->tasks.pop();
+                        }
+                        task = std::move(tasks_.front());
+                        tasks_.pop();
                     }
-                    idlThrNum--;
+                    --idlThrNum_;
                     task();
-                    idlThrNum++;
+                    ++idlThrNum_;
                 }
             });
         }
     }
 
-    inline ~threadpool()
+    inline ~ThreadPool()
     {
-        stoped.store(true);
-        cv_task.notify_all();
-        for (std::thread &thread : pool)
+        stoped_.store(true);
+        task_cv_.notify_all();
+        for (std::thread &thread : pool_)
         {
             if (thread.joinable())
             {
@@ -68,21 +70,23 @@ class threadpool
     template <class F, class... Args>
     auto commit(F &&f, Args &&... args) -> std::future<decltype(f(args...))>
     {
-        if (stoped.load())
+        if (stoped_.load())
+        {
             throw std::runtime_error("commit on ThreadPool is stopped");
+        }
 
         using RetType = typename std::result_of<F(Args...)>::type;
         auto task = std::make_shared<std::packaged_task<RetType()>>(std::bind(std::forward<F>(f), std::forward<Args>(args)...));
         std::future<RetType> future = task->get_future();
         {
-            std::lock_guard<std::mutex> lock{m_lock};
-            tasks.emplace([task]() { (*task)(); });
+            std::lock_guard<std::mutex> lock{task_lock_};
+            tasks_.emplace([task]() { (*task)(); });
         }
-        cv_task.notify_one();
+        task_cv_.notify_one();
         return future;
     }
 
-    int idlCount() { return idlThrNum; }
+    int idlCount() { return idlThrNum_; }
 };
 
 std::mutex s_cout;
@@ -99,14 +103,15 @@ int countdown(int from, int to)
     }
     {
         std::lock_guard<std::mutex> lock{s_cout};
-        std::cout << std::hex << std::this_thread::get_id() << ": " << "Finished!\n";
+        std::cout << std::hex << std::this_thread::get_id() << ": "
+                  << "Finished!\n";
     }
     return from - to;
 }
 
 TEST(threadpool, simple)
 {
-    threadpool executor{2};
+    ThreadPool executor{2};
     std::future<int> f5 = executor.commit(countdown, 5, 0);
     std::future<int> f10 = executor.commit(countdown, 10, 5);
     executor.commit(countdown, 15, 10);
@@ -117,6 +122,12 @@ TEST(threadpool, simple)
         std::lock_guard<std::mutex> lock{s_cout};
         std::cout << r5 << '\n';
     }
+}
+
+TEST(threadpool, idlCount)
+{
+    ThreadPool executor{};
+    ASSERT_EQ(4, executor.idlCount());
 }
 
 } // namespace thread_pool

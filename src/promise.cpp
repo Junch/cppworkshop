@@ -12,18 +12,18 @@ namespace promise
 // Web: https://thispointer.com/c11-multithreading-part-8-stdfuture-stdpromise-and-returning-values-from-thread/
 ///////////////////////////////////////////////////////////////////////////////
 
-void initiazer(std::promise<int> *promObj)
+void initiazer(std::promise<int> *prom_obj)
 {
     std::cout << "Inside Thread\n";
-    promObj->set_value(35);
+    prom_obj->set_value(35);
 }
 
 TEST(promise, simple)
 {
-    std::promise<int> promiseObj;
-    std::future<int> futureObj = promiseObj.get_future();
-    std::thread th(initiazer, &promiseObj);
-    std::cout << futureObj.get() << std::endl;
+    std::promise<int> promise_obj;
+    std::future<int> future_obj = promise_obj.get_future();
+    std::thread th(initiazer, &promise_obj);
+    std::cout << future_obj.get() << std::endl;
     th.join();
 }
 

@@ -12,7 +12,7 @@ namespace function_lambda
 // Web: https://shaharmike.com/cpp/lambdas-and-functions/
 ///////////////////////////////////////////////////////////////////////////////
 
-void global_f()
+void globalF()
 {
     std::cout << "global_f()\n";
 }
@@ -27,7 +27,7 @@ TEST(function, simple)
     std::function<void()> f;
     std::cout << "sizeof(f) == " << sizeof(f) << std::endl;
 
-    f = global_f;
+    f = globalF;
     f();
 
     f = []() { std::cout << "Lambda\n"; };

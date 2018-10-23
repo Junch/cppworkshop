@@ -70,7 +70,7 @@ struct A
 // };
 
 template <typename T, typename... Args>
-T *Instance(Args &&... args)
+T *instance(Args &&... args)
 {
     return new T(std::forward<Args>(args)...);
 };
@@ -78,8 +78,8 @@ T *Instance(Args &&... args)
 TEST(variadic, factory)
 {
     int value = 1;
-    Instance<A>(1);
-    Instance<A>(value);
+    instance<A>(1);
+    instance<A>(value);
 }
 
 } // namespace variadic_template
