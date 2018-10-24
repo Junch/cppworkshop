@@ -58,7 +58,7 @@ IF (coverage)
   ADD_TEST(NAME MainTest COMMAND MainTest)
 
   # Code Coverage
-  IF(CMAKE_COMPILER_IS_GNUCXX OR "${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang")
+  IF(CMAKE_COMPILER_IS_GNUCXX OR "${CMAKE_CXX_COMPILER_ID}" MATCHES "^(Apple)?Clang$")
       INCLUDE(CodeCoverage)
       SETUP_TARGET_FOR_COVERAGE(${PROJECT_NAME}_coverage MainTest coverage)
   ENDIF()
