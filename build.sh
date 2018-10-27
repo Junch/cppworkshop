@@ -7,6 +7,7 @@
 
 VERBOSE=false
 COVERAGE=OFF
+SANITIZE=OFF
 
 #Set Script Name variable
 SCRIPT=`basename ${BASH_SOURCE[0]}`
@@ -19,14 +20,15 @@ REV=`tput smso`
 #Help function
 function HELP {
   echo -e "${REV}Basic usage:${NORM} ${BOLD}$SCRIPT${NORM}"\\n
+  echo "${REV}-s${NORM} --Sets option ${BOLD}SANITIZE${NORM} ON."
+  echo "${REV}-c${NORM} --Sets option ${BOLD}OVERAGE${NORM} ON."
   echo "${REV}-v${NORM} --Sets option ${BOLD}VEROSE${NORM} ON."
-  echo "${REV}-c${NORM} --Sets option ${BOLD}CODE COVERAGE${NORM} ON."
   echo -e "${REV}-h${NORM} --Displays this help message. No further functions are performed."\\n
-  echo -e "Example: ${BOLD}$SCRIPT -vc${NORM}"\\n
+  echo -e "Example: ${BOLD}$SCRIPT -scv${NORM}"\\n
   exit 1
 }
 
-while getopts vhc opt; do
+while getopts vcsh opt; do
   case ${opt} in
     v)
        VERBOSE=true
@@ -35,6 +37,10 @@ while getopts vhc opt; do
     c)
        COVERAGE=ON
        echo "-c used"
+       ;;
+    s)
+       SANITIZE=ON
+       echo "-s used"
        ;;
     h)
        HELP
@@ -47,13 +53,16 @@ done
 shift "$((OPTIND-1))"
 
 BUILDDIR=_build
-if [ ${COVERAGE} = ON ]; then
+if [ ${SANITIZE} = ON ]; then
+    BUILDDIR=_build_sanitize
+    COVERAGE=OFF
+elif [ ${COVERAGE} = ON ]; then
     BUILDDIR=_build_coverage
 fi
 
 mkdir ${BUILDDIR} > /dev/null
 pushd ${BUILDDIR} > /dev/null
-cmake -DCMAKE_EXPORT_COMPILE_COMMANDS=ON -Dcoverage=${COVERAGE} ..
+cmake -DCMAKE_EXPORT_COMPILE_COMMANDS=ON -Dsanitize=${SANITIZE} -Dcoverage=${COVERAGE} ..
 
 if [ ${VERBOSE} = true ]; then
     make VERBOSE=1
@@ -61,10 +70,12 @@ else
     make
 fi
 
-if [ ${COVERAGE} = ON ]; then
-    make test
-    ctest
-    make Test_coverage
+if [ ${SANITIZE} = ON ]; then
+  ./MainTest
+elif [ ${COVERAGE} = ON ]; then
+  make test
+  ctest
+  make Test_coverage
 fi
 
 popd > /dev/null

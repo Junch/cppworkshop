@@ -1,8 +1,14 @@
 cmake_minimum_required(VERSION 3.1.0 FATAL_ERROR)
 PROJECT(Test VERSION 1.0.0 LANGUAGES CXX)
 
-# Required for gCov
+OPTION(sanitize "Built with the sanitize support." OFF)
 OPTION(coverage "Built with the gCov/lcov support." OFF)
+
+IF (sanitize)
+  SET(CMAKE_BUILD_TYPE Debug)
+  SET(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -O1 -fno-omit-frame-pointer -fsanitize=address") 
+  SET(CMAKE_LINKER_FLAGS_DEBUG "${CMAKE_LINKER_FLAGS_DEBUG} -fno-omit-frame-pointer -fsanitize=address")
+ENDIF()
 
 IF (coverage)
   SET(CMAKE_BUILD_TYPE Debug)
