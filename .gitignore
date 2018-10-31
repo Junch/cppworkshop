@@ -1,3 +1,2 @@
-_build
-_build_coverage
-_build_sanitize
+_build*
+build

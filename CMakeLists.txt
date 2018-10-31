@@ -4,25 +4,17 @@ PROJECT(Test VERSION 1.0.0 LANGUAGES CXX)
 OPTION(sanitize "Built with the sanitize support." OFF)
 OPTION(coverage "Built with the gCov/lcov support." OFF)
 
+SET(CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR}/CMakeModules ${CMAKE_MODULE_PATH})
+
 IF (sanitize)
   SET(CMAKE_BUILD_TYPE Debug)
-  SET(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -O1 -fno-omit-frame-pointer -fsanitize=address") 
-  SET(CMAKE_LINKER_FLAGS_DEBUG "${CMAKE_LINKER_FLAGS_DEBUG} -fno-omit-frame-pointer -fsanitize=address")
+  INCLUDE(sanitizers)
 ENDIF()
 
 IF (coverage)
   SET(CMAKE_BUILD_TYPE Debug)
-
-  ADD_DEFINITIONS(
-    -g
-    -O0
-    -Wall
-    -fprofile-arcs    # Required for gCov
-    -ftest-coverage   # Required for gCov  
-  )
 ENDIF()
 
-SET(CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR}/CMakeModules ${CMAKE_MODULE_PATH})
 FIND_PACKAGE(Threads)
 
 ###############################################################################
@@ -34,6 +26,7 @@ OPTION(gtest_force_shared_crt "" ON)
 ###############################################################################
 # Title: When should I use add_subdirectory and when ExternalProject
 # Web: https://cmake.org/pipermail/cmake/2013-February/053429.html
+#      https://cliutils.gitlab.io/modern-cmake/chapters/testing/googletest.html
 ###############################################################################
 ADD_SUBDIRECTORY(3rd-party/googletest EXCLUDE_FROM_ALL)
 INCLUDE_DIRECTORIES(3rd-party/googletest/googletest/include)
@@ -50,14 +43,15 @@ SET_TARGET_PROPERTIES(MainTest PROPERTIES
   CXX_STANDARD_PROPERTIES YES
   CXX_EXTENSIONS NO)
 
-TARGET_LINK_LIBRARIES(MainTest gtest gtest_main)
-TARGET_LINK_LIBRARIES(MainTest ${CMAKE_THREAD_LIBS_INIT})
+TARGET_LINK_LIBRARIES(MainTest PRIVATE gtest gtest_main)
+TARGET_LINK_LIBRARIES(MainTest PRIVATE ${CMAKE_THREAD_LIBS_INIT})
 
 # Code Coverage
 IF (coverage)
+  TARGET_COMPILE_OPTIONS(MainTest PRIVATE -O0 -Wall -fprofile-arcs -ftest-coverage)
 
   # Required for gCov
-  SET(CMAKE_EXE_LINKER_FLAGS "-fprofile-arcs -ftest-coverage")
+  SET_PROPERTY(TARGET MainTest APPEND_STRING PROPERTY LINK_FLAGS "-fprofile-arcs -ftest-coverage")
 
   # Configure Ctest
   ENABLE_TESTING()
