@@ -8,6 +8,7 @@
 VERBOSE=false
 COVERAGE=OFF
 SANITIZE=OFF
+DEBUG=OFF
 
 #Set Script Name variable
 SCRIPT=`basename ${BASH_SOURCE[0]}`
@@ -23,24 +24,29 @@ function HELP {
   echo "${REV}-s${NORM} --Sets option ${BOLD}SANITIZE${NORM} ON."
   echo "${REV}-c${NORM} --Sets option ${BOLD}OVERAGE${NORM} ON."
   echo "${REV}-v${NORM} --Sets option ${BOLD}VEROSE${NORM} ON."
+  echo "${REV}-d${NORM} --Sets option ${BOLD}DEBUG${NORM} ON."
   echo -e "${REV}-h${NORM} --Displays this help message. No further functions are performed."\\n
   echo -e "Example: ${BOLD}$SCRIPT -scv${NORM}"\\n
   exit 1
 }
 
-while getopts vcsh opt; do
+while getopts vcshd opt; do
   case ${opt} in
     v)
        VERBOSE=true
-       echo "-v used" 
+       echo "-v VERBOSE used." 
        ;;
     c)
        COVERAGE=ON
-       echo "-c used"
+       echo "-c COVERAGE used."
        ;;
     s)
        SANITIZE=ON
-       echo "-s used"
+       echo "-s SANITIZE used"
+       ;;
+    d)
+       DEBUG=ON
+       echo "-d DEBUG used"
        ;;
     h)
        HELP
@@ -62,7 +68,9 @@ fi
 
 mkdir ${BUILDDIR} > /dev/null
 pushd ${BUILDDIR} > /dev/null
-cmake -DCMAKE_EXPORT_COMPILE_COMMANDS=ON -Dsanitize=${SANITIZE} -Dcoverage=${COVERAGE} ..
+
+[[ ${DEBUG} = ON ]] && BUILD_TYPE=Debug || BUILD_TYPE=Release  #https://codeday.me/bug/20170318/7493.html
+cmake -DCMAKE_EXPORT_COMPILE_COMMANDS=ON -Dsanitize=${SANITIZE} -Dcoverage=${COVERAGE} -DCMAKE_BUILD_TYPE=${BUILD_TYPE} ..
 
 if [ ${VERBOSE} = true ]; then
     make VERBOSE=1

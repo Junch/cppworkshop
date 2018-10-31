@@ -12,10 +12,13 @@ namespace valgrind
 
 TEST(valgrind, use_uninitialized_values)
 {
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wuninitialized"
     bool condition;
     if (condition) {
         //Do the thing
     }
+#pragma GCC diagnostic pop
 }
 
 TEST(valgrind, accessing_wrong_memory)
@@ -32,7 +35,8 @@ TEST(valgrind, accessing_wrong_memory)
 
 TEST(valgrind, memory_leak)
 {
-    malloc(7);
+    void *p = malloc(7);
+    p = 0;
     // Should fail as 7 bytes are not freed.
 }
 
