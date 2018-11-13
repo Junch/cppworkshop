@@ -2,6 +2,10 @@
 #include <string>
 #include <memory>
 
+#ifdef _WIN32
+    #pragma warning(disable : 4100)
+#endif
+
 namespace function_signature
 {
 ///////////////////////////////////////////////////////////////////////////////

@@ -1,6 +1,15 @@
 #include <vector>
 #include <gtest/gtest.h>
 
+#ifdef _WIN32
+#pragma warning(disable : 4068 4700)
+#endif
+
+#if defined(_WIN32) && defined(_DEBUG) 
+    #define DEBUG_NEW new(_NORMAL_BLOCK, __FILE__, __LINE__)
+    #define new DEBUG_NEW
+#endif
+
 namespace valgrind
 {
 

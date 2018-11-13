@@ -74,14 +74,14 @@ TEST(lambda, scope)
 TEST(lambda, size)
 {
     auto f1 = []() {};
-    ASSERT_EQ(1, sizeof(f1));
+    ASSERT_EQ(1, (int)sizeof(f1));
 
     std::array<char, 100> ar;
     auto f2 = [&ar]() { ar[0] = 1; };
     ASSERT_EQ(sizeof(void *), sizeof(f2));
 
     auto f3 = [ar]() mutable { ar[0] = 1;};
-    ASSERT_EQ(100, sizeof(f3));
+    ASSERT_EQ(100, (int)sizeof(f3));
 }
 
 ///////////////////////////////////////////////////////////////////////////////

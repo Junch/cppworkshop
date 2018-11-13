@@ -1,6 +1,10 @@
 ﻿#include <gtest/gtest.h>
 #include <vector>
 
+#ifdef _WIN32
+    #pragma warning(disable : 4100)
+#endif
+
 namespace variadic_template
 {
 

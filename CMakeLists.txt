@@ -10,6 +10,7 @@ SET(CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR}/CMakeModules ${CMAKE_MODULE_PATH})
 if (MSVC)
   # warning level 4 and all warnings as errors
   add_compile_options(/W4 /WX)
+  add_compile_options(/D_CRTDBG_MAP_ALLOC)
 else()
   # lots of warnings and all warnings as errors
   add_compile_options(-Wall -Wextra -pedantic -Werror)
