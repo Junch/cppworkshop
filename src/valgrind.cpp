@@ -36,7 +36,7 @@ TEST(valgrind, accessing_wrong_memory)
 TEST(valgrind, memory_leak)
 {
     void *p = malloc(7);
-    p = 0;
+    p = nullptr;
     // Should fail as 7 bytes are not freed.
 }
 

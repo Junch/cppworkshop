@@ -6,8 +6,6 @@ Language:      Cpp
 Standard:      Cpp11
 BreakBeforeBraces: Allman
 ColumnLimit:     128
-NamespaceIndentation: All
-AllowShortFunctionsOnASingleLine: None
 AlwaysBreakTemplateDeclarations: Yes
 NamespaceIndentation: None
 AllowShortFunctionsOnASingleLine: InlineOnly
