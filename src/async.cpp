@@ -3,6 +3,10 @@
 #include <numeric>
 #include <vector>
 
+#ifdef _WIN32
+#pragma warning(disable : 4702)
+#endif
+
 namespace async
 {
 
@@ -12,7 +16,7 @@ namespace async
 // Web: https://eli.thegreenplace.net/2016/the-promises-and-challenges-of-stdasync-task-based-parallelism-in-c11/
 ///////////////////////////////////////////////////////////////////////////////
 
-void accumulate_block_worker(const std::vector<int>& v, int *result)
+void accumulate_block_worker(const std::vector<int> &v, int *result)
 {
     *result = std::accumulate(v.begin(), v.end(), 0);
 }
@@ -26,7 +30,7 @@ TEST(async, thread)
     ASSERT_EQ(36, result);
 }
 
-int accumulate_block_worker_ret(const std::vector<int>& v)
+int accumulate_block_worker_ret(const std::vector<int> &v)
 {
     return std::accumulate(v.begin(), v.end(), 0);
 }
@@ -44,7 +48,7 @@ TEST(async, async)
 // Web: https://eli.thegreenplace.net/2016/the-promises-and-challenges-of-stdasync-task-based-parallelism-in-c11/
 ///////////////////////////////////////////////////////////////////////////////
 
-int accumulate_block_worker_throw(const std::vector<int>& v)
+int accumulate_block_worker_throw(const std::vector<int> &v)
 {
     throw std::runtime_error("something broke");
     return std::accumulate(v.begin(), v.end(), 0);
