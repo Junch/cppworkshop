@@ -42,6 +42,33 @@ ADD_SUBDIRECTORY(3rd-party/googletest EXCLUDE_FROM_ALL)
 INCLUDE_DIRECTORIES(3rd-party/googletest/googletest/include)
 INCLUDE_DIRECTORIES(3rd-party/googletest/googlemock/include)
 
+###############################################################################
+# Title: 正确地使用ExternalProject_Add添加外部项目到本地cmake项目
+# https://gist.github.com/taogashi/33ebf6b4285ba96419b0aea3d7f4d63e
+# https://git.cs.colorado.edu/caldweba/grappa-pmem/blob/master/third-party/CMakeLists.txt
+# https://github.com/dev-cafe/cmake-cookbook/blob/master/chapter-08/recipe-01/cxx-example/CMakeLists.txt
+###############################################################################
+INCLUDE(ExternalProject)
+
+SET (install_dir ${CMAKE_BINARY_DIR}/3rd-party)
+INCLUDE_DIRECTORIES(${install_dir}/include)
+LINK_DIRECTORIES(${install_dir}/lib)
+
+ExternalProject_Add(third-party-gflags
+  SOURCE_DIR      ${CMAKE_CURRENT_LIST_DIR}/3rd-party/gflags
+  PREFIX          ${CMAKE_BINARY_DIR}/gflags
+  INSTALL_DIR     ${install_dir}
+  CMAKE_ARGS      -DCMAKE_INSTALL_PREFIX:PATH=<INSTALL_DIR>
+)
+
+ExternalProject_Add( third-party-glog
+  SOURCE_DIR      ${CMAKE_CURRENT_SOURCE_DIR}/3rd-party/glog
+  PREFIX          ${CMAKE_BINARY_DIR}/glog
+  INSTALL_DIR     ${install_dir}
+  CMAKE_ARGS      -DCMAKE_INSTALL_PREFIX:PATH=<INSTALL_DIR>
+  DEPENDS         third-party-gflags
+)
+
 FILE(GLOB TEST_SRC ${PROJECT_SOURCE_DIR}/src/*.cpp)
 ADD_EXECUTABLE(MainTest ${TEST_SRC})
 ###############################################################################
@@ -53,8 +80,11 @@ SET_TARGET_PROPERTIES(MainTest PROPERTIES
   CXX_STANDARD_PROPERTIES YES
   CXX_EXTENSIONS NO)
 
-TARGET_LINK_LIBRARIES(MainTest PRIVATE gtest gtest_main)
+TARGET_LINK_LIBRARIES(MainTest PRIVATE gtest)
 TARGET_LINK_LIBRARIES(MainTest PRIVATE ${CMAKE_THREAD_LIBS_INIT})
+TARGET_LINK_LIBRARIES(MainTest PRIVATE -lgflags -lglog)
+
+ADD_DEPENDENCIES(MainTest third-party-glog)
 
 # Code Coverage
 IF (coverage)

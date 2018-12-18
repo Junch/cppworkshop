@@ -1,5 +1,7 @@
 #include <gtest/gtest.h>
 #include <vector>
+#include <gflags/gflags.h>
+#include <glog/logging.h>
 
 #if defined(_WIN32) && defined(_DEBUG) 
 #include <crtdbg.h>
@@ -51,6 +53,11 @@ int main(int argc, char **argv)
 #endif
 
     testing::InitGoogleTest(&argc, argv);
+
+    gflags::SetVersionString("1.0.0.0");
+    gflags::ParseCommandLineFlags(&argc, &argv, true);
+    google::InitGoogleLogging(argv[0]);
+
 #if defined(_WIN32) && defined(_DEBUG) 
     testing::UnitTest::GetInstance()->listeners().Append(new testing::MemoryLeakDetector());
 #endif
