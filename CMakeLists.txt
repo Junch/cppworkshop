@@ -78,11 +78,29 @@ ADD_EXECUTABLE(MainTest ${TEST_SRC})
 SET_TARGET_PROPERTIES(MainTest PROPERTIES 
   CXX_STANDARD 14
   CXX_STANDARD_PROPERTIES YES
-  CXX_EXTENSIONS NO)
+  CXX_EXTENSIONS NO
+)
 
 TARGET_LINK_LIBRARIES(MainTest PRIVATE gtest)
 TARGET_LINK_LIBRARIES(MainTest PRIVATE ${CMAKE_THREAD_LIBS_INIT})
-TARGET_LINK_LIBRARIES(MainTest PRIVATE -lgflags -lglog)
+
+if (MSVC)
+  #############################################################################
+  # MSVC/MinGW中导入glog静态库的正确方式
+  # https://blog.csdn.net/10km/article/details/74564011
+  #############################################################################
+  # Cmake: Specifiy config specific settings for multi-config cmake project
+  # https://stackoverflow.com/questions/46581729/cmake-specifiy-config-specific-settings-for-multi-config-cmake-project
+  # https://stackoverflow.com/questions/24460486/cmake-build-type-not-being-used-in-cmakelists-txt
+  # https://github.com/Microsoft/vcpkg/issues/4606
+  #############################################################################
+  TARGET_COMPILE_DEFINITIONS(MainTest PUBLIC -DGOOGLE_GLOG_DLL_DECL=)
+  TARGET_LINK_LIBRARIES(MainTest PRIVATE shlwapi.lib)
+  TARGET_LINK_LIBRARIES(MainTest PRIVATE $<IF:$<CONFIG:Debug>,gflags_static_debug.lib,gflags_static.lib>)
+  TARGET_LINK_LIBRARIES(MainTest PRIVATE $<IF:$<CONFIG:Debug>,glogd.lib,glog.lib>)
+else()
+  TARGET_LINK_LIBRARIES(MainTest PRIVATE -lgflags -lglog )
+endif()
 
 ADD_DEPENDENCIES(MainTest third-party-glog)
 
