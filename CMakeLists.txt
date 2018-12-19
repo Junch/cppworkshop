@@ -55,18 +55,20 @@ INCLUDE_DIRECTORIES(${install_dir}/include)
 LINK_DIRECTORIES(${install_dir}/lib)
 
 ExternalProject_Add(third-party-gflags
-  SOURCE_DIR      ${CMAKE_CURRENT_LIST_DIR}/3rd-party/gflags
-  PREFIX          ${CMAKE_BINARY_DIR}/gflags
-  INSTALL_DIR     ${install_dir}
-  CMAKE_ARGS      -DCMAKE_INSTALL_PREFIX:PATH=<INSTALL_DIR>
+  SOURCE_DIR        ${CMAKE_CURRENT_LIST_DIR}/3rd-party/gflags
+  PREFIX            ${CMAKE_BINARY_DIR}/gflags
+  INSTALL_DIR       ${install_dir}
+  CMAKE_ARGS        -DCMAKE_INSTALL_PREFIX:PATH=<INSTALL_DIR>
+                    -DCMAKE_BUILD_TYPE=${CMAKE_BUILD_TYPE}
 )
 
 ExternalProject_Add( third-party-glog
-  SOURCE_DIR      ${CMAKE_CURRENT_SOURCE_DIR}/3rd-party/glog
-  PREFIX          ${CMAKE_BINARY_DIR}/glog
-  INSTALL_DIR     ${install_dir}
-  CMAKE_ARGS      -DCMAKE_INSTALL_PREFIX:PATH=<INSTALL_DIR>
-  DEPENDS         third-party-gflags
+  SOURCE_DIR        ${CMAKE_CURRENT_SOURCE_DIR}/3rd-party/glog
+  PREFIX            ${CMAKE_BINARY_DIR}/glog
+  INSTALL_DIR       ${install_dir}
+  CMAKE_ARGS        -DCMAKE_INSTALL_PREFIX:PATH=<INSTALL_DIR>
+                    -DCMAKE_BUILD_TYPE=${CMAKE_BUILD_TYPE}
+  DEPENDS           third-party-gflags
 )
 
 FILE(GLOB TEST_SRC ${PROJECT_SOURCE_DIR}/src/*.cpp)
@@ -93,13 +95,15 @@ if (MSVC)
   # https://stackoverflow.com/questions/46581729/cmake-specifiy-config-specific-settings-for-multi-config-cmake-project
   # https://stackoverflow.com/questions/24460486/cmake-build-type-not-being-used-in-cmakelists-txt
   # https://github.com/Microsoft/vcpkg/issues/4606
+  # https://gitlab.kitware.com/cmake/cmake/issues/17645
   #############################################################################
   TARGET_COMPILE_DEFINITIONS(MainTest PUBLIC -DGOOGLE_GLOG_DLL_DECL=)
   TARGET_LINK_LIBRARIES(MainTest PRIVATE shlwapi.lib)
   TARGET_LINK_LIBRARIES(MainTest PRIVATE $<IF:$<CONFIG:Debug>,gflags_static_debug.lib,gflags_static.lib>)
   TARGET_LINK_LIBRARIES(MainTest PRIVATE $<IF:$<CONFIG:Debug>,glogd.lib,glog.lib>)
 else()
-  TARGET_LINK_LIBRARIES(MainTest PRIVATE -lgflags -lglog )
+  TARGET_LINK_LIBRARIES(MainTest PRIVATE debug glogd optimized glog)
+  TARGET_LINK_LIBRARIES(MainTest PRIVATE debug gflags_debug optimized gflags)
 endif()
 
 ADD_DEPENDENCIES(MainTest third-party-glog)

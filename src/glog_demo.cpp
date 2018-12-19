@@ -11,6 +11,9 @@
 TEST(glog, simple)
 {
     // --logtostderr 1 will outputs the INFO and WARNING as well
+    // On Mac the command should be executed as administrator or specify the log file location by --log_dir
+    // or else the log is not created under /tmp
+    //   sudo ./MainTest --gtest_filter=glog.simple
 
     LOG(INFO) << "This is INFO";
     LOG(WARNING) << "This is WARNING";
