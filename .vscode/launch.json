@@ -17,6 +17,17 @@
             "cwd": "${workspaceFolder}/_build",
             "environment": [],
             "externalConsole": false
-        }
+        },
+        {
+            "name": "(Windows) GoogleTest Adapter",
+            "type": "cppvsdbg",
+            "request": "launch",
+            "program": "${workspaceFolder}/_build/Debug/MainTest",
+            "args": [],
+            "stopAtEntry": false,
+            "cwd": "${workspaceFolder}/_build/Debug",
+            "environment": [],
+            "externalConsole": false
+        },
     ]
 }
