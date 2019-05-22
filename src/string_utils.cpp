@@ -1,7 +1,9 @@
+#include <codecvt>
 #include <gtest/gtest.h>
 #include <memory>
+#include <regex>
 #include <stdarg.h>
-#include <codecvt>
+#include <array>
 
 namespace string_utils
 {
@@ -33,7 +35,7 @@ TEST(stringFormat, simple)
     ASSERT_STREQ(r.c_str(), "apples => 7");
 }
 
-std::wstring s2ws(const std::string& str)
+std::wstring s2ws(const std::string &str)
 {
     using convert_typeX = std::codecvt_utf8<wchar_t>;
     std::wstring_convert<convert_typeX, wchar_t> converterX;
@@ -41,7 +43,7 @@ std::wstring s2ws(const std::string& str)
     return converterX.from_bytes(str);
 }
 
-std::string ws2s(const std::wstring& wstr)
+std::string ws2s(const std::wstring &wstr)
 {
     using convert_typeX = std::codecvt_utf8<wchar_t>;
     std::wstring_convert<convert_typeX, wchar_t> converterX;
@@ -49,6 +51,54 @@ std::string ws2s(const std::wstring& wstr)
     return converterX.to_bytes(wstr);
 }
 
+template <class Container> void split1(const std::string &str, Container &cont)
+{
+    std::istringstream iss(str);
+    std::copy(std::istream_iterator<std::string>(iss), std::istream_iterator<std::string>(), std::back_inserter(cont));
+}
+
+void replaceStringInPlace(std::string& subject, const std::string& search,
+                          const std::string& replace) {
+    size_t pos = 0;
+    while((pos = subject.find(search, pos)) != std::string::npos) {
+         subject.replace(pos, search.length(), replace);
+         pos += replace.length();
+    }
+}
+
+bool stringMatch(const std::string &searchString, const std::string &userName)
+{
+    std::vector<std::string> container;
+    split1(searchString, container);
+    bool matched  = false;
+
+    try
+    {
+        std::stringstream iss;
+        iss << ".*";
+        // https://stackoverflow.com/questions/40195412/c11-regex-search-for-exact-string-escape
+        std::regex specialChars { R"([-[\]{}()*+?.,\^$|#\s])" };
+        for (const std::string &item : container)
+        {
+            // matches any characters that need to be escaped in RegEx
+            std::string santized_item = std::regex_replace(item, specialChars, R"(\$&)" );
+            iss << "\\b" << santized_item << ".*";
+        }
+
+        std::string regString = iss.str();
+        std::cout << regString << "\n";
+        printf("%s\n", regString.c_str());
+        std::regex ex(regString, std::regex_constants::icase);
+
+        matched = std::regex_match(userName, ex);
+    }
+    catch(std::regex_error)
+    {
+
+    }
+
+    return matched;
+}
 
 ///////////////////////////////////////////////////////////////////////////////
 // No. 2
@@ -82,6 +132,49 @@ TEST(stringConvert, oneline_wstring2string)
     std::wstring str(L"Hello World! 你好!");
     std::string s = std::wstring_convert<std::codecvt_utf8<wchar_t>>().to_bytes(str);
     ASSERT_STREQ("Hello World! 你好!", s.c_str());
+}
+
+TEST(split1, simple)
+{
+    std::string abc("It is  very   interesting");
+    std::vector<std::string> container;
+    split1(abc, container);
+    for (const auto &item : container)
+    {
+        printf("%s\n", item.c_str());
+    }
+}
+
+class RegexTest : public testing::TestWithParam<std::tuple<std::string, std::string, bool>>
+{
+  public:
+    void SetUp() override {}
+    void TearDown() override {}
+};
+
+INSTANTIATE_TEST_CASE_P(stringMatch, RegexTest,
+                        ::testing::Values(std::tuple<std::string, std::string, bool>("Chen", "Chen Yu", true),
+                                          std::tuple<std::string, std::string, bool>("Chen", "Aran Chen", true),
+                                          std::tuple<std::string, std::string, bool>("chen", "ChengZhi Li", true),
+                                          std::tuple<std::string, std::string, bool>("chen", "CChen Yu", false),
+                                          std::tuple<std::string, std::string, bool>("j c", "Jack Chen", true),
+                                          std::tuple<std::string, std::string, bool>("j c", "Aviva Jia Chen", true),
+                                          std::tuple<std::string, std::string, bool>("av c", "", false),
+                                          std::tuple<std::string, std::string, bool>("", "", true),
+                                          std::tuple<std::string, std::string, bool>("", "abc", true),
+                                          std::tuple<std::string, std::string, bool>("+123", "+12345", true),
+                                          std::tuple<std::string, std::string, bool>("12+3", "12+345", true),
+                                          std::tuple<std::string, std::string, bool>("12-3", "12-345", true),
+                                          std::tuple<std::string, std::string, bool>("12[3", "12[345", true),
+                                          std::tuple<std::string, std::string, bool>("av c", "Aviva Jia Chen", true)));
+
+TEST_P(RegexTest, one_word)
+{
+    const std::string &serachString = std::get<0>(GetParam());
+    const std::string &userName = std::get<1>(GetParam());
+    bool bMatch = std::get<2>(GetParam());
+
+    ASSERT_EQ(bMatch, stringMatch(serachString, userName));
 }
 
 } // namespace string_utils
