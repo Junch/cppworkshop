@@ -1,9 +1,9 @@
+#include <array>
 #include <codecvt>
 #include <gtest/gtest.h>
 #include <memory>
 #include <regex>
 #include <stdarg.h>
-#include <array>
 
 namespace string_utils
 {
@@ -51,18 +51,20 @@ std::string ws2s(const std::wstring &wstr)
     return converterX.to_bytes(wstr);
 }
 
-template <class Container> void split1(const std::string &str, Container &cont)
+template <class Container>
+void split1(const std::string &str, Container &cont)
 {
     std::istringstream iss(str);
     std::copy(std::istream_iterator<std::string>(iss), std::istream_iterator<std::string>(), std::back_inserter(cont));
 }
 
-void replaceStringInPlace(std::string& subject, const std::string& search,
-                          const std::string& replace) {
+void replaceStringInPlace(std::string &subject, const std::string &search, const std::string &replace)
+{
     size_t pos = 0;
-    while((pos = subject.find(search, pos)) != std::string::npos) {
-         subject.replace(pos, search.length(), replace);
-         pos += replace.length();
+    while ((pos = subject.find(search, pos)) != std::string::npos)
+    {
+        subject.replace(pos, search.length(), replace);
+        pos += replace.length();
     }
 }
 
@@ -70,18 +72,18 @@ bool stringMatch(const std::string &searchString, const std::string &userName)
 {
     std::vector<std::string> container;
     split1(searchString, container);
-    bool matched  = false;
+    bool matched = false;
 
     try
     {
         std::stringstream iss;
         iss << ".*";
         // https://stackoverflow.com/questions/40195412/c11-regex-search-for-exact-string-escape
-        std::regex specialChars { R"([-[\]{}()*+?.,\^$|#\s])" };
+        std::regex specialChars{R"([-[\]{}()*+?.,\^$|#\s])"};
         for (const std::string &item : container)
         {
             // matches any characters that need to be escaped in RegEx
-            std::string santized_item = std::regex_replace(item, specialChars, R"(\$&)" );
+            std::string santized_item = std::regex_replace(item, specialChars, R"(\$&)");
             iss << "\\b" << santized_item << ".*";
         }
 
@@ -92,9 +94,8 @@ bool stringMatch(const std::string &searchString, const std::string &userName)
 
         matched = std::regex_match(userName, ex);
     }
-    catch(std::regex_error)
+    catch (std::regex_error)
     {
-
     }
 
     return matched;
