@@ -171,7 +171,7 @@ class RegexTest : public testing::TestWithParam<std::tuple<std::string, std::str
     void TearDown() override {}
 };
 
-INSTANTIATE_TEST_CASE_P(stringMatch, RegexTest,
+INSTANTIATE_TEST_SUITE_P(stringMatch, RegexTest,
                         ::testing::Values(std::tuple<std::string, std::string, bool>("Chen", "Chen Yu", true),
                                           std::tuple<std::string, std::string, bool>("Chen", "Aran Chen", true),
                                           std::tuple<std::string, std::string, bool>("chen", "ChengZhi Li", true),
