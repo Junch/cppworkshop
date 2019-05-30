@@ -78,7 +78,7 @@ ADD_EXECUTABLE(MainTest ${TEST_SRC})
 # Web: https://crascit.com/2015/03/28/enabling-cxx11-in-cmake
 ###############################################################################
 SET_TARGET_PROPERTIES(MainTest PROPERTIES 
-  CXX_STANDARD 14
+  CXX_STANDARD 17
   CXX_STANDARD_PROPERTIES YES
   CXX_EXTENSIONS NO
 )

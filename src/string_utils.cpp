@@ -35,6 +35,11 @@ TEST(stringFormat, simple)
     ASSERT_STREQ(r.c_str(), "apples => 7");
 }
 
+#ifdef _MSC_VER
+#pragma warning(push)
+#pragma warning(disable : 4996)
+#endif
+
 std::wstring s2ws(const std::string &str)
 {
     using convert_typeX = std::codecvt_utf8<wchar_t>;
@@ -50,6 +55,10 @@ std::string ws2s(const std::wstring &wstr)
 
     return converterX.to_bytes(wstr);
 }
+
+#ifdef _MSC_VER
+#pragma warning(pop)
+#endif
 
 template <class Container>
 void split1(const std::string &str, Container &cont)
@@ -114,18 +123,23 @@ TEST(stringConvert, string2wstring)
     ASSERT_STREQ(L"Hello World! 你好!", s.c_str());
 }
 
-TEST(stringConvert, oneline_string2wstring)
-{
-    std::string str("Hello World! 你好!");
-    std::wstring s = std::wstring_convert<std::codecvt_utf8<wchar_t>>().from_bytes(str);
-    ASSERT_STREQ(L"Hello World! 你好!", s.c_str());
-}
-
 TEST(stringConvert, wstring2string)
 {
     std::wstring str(L"Hello World! 你好!");
     std::string s = ws2s(str);
     ASSERT_STREQ("Hello World! 你好!", s.c_str());
+}
+
+#ifdef _MSC_VER
+#pragma warning(push)
+#pragma warning(disable : 4996)
+#endif
+
+TEST(stringConvert, oneline_string2wstring)
+{
+    std::string str("Hello World! 你好!");
+    std::wstring s = std::wstring_convert<std::codecvt_utf8<wchar_t>>().from_bytes(str);
+    ASSERT_STREQ(L"Hello World! 你好!", s.c_str());
 }
 
 TEST(stringConvert, oneline_wstring2string)
@@ -134,6 +148,10 @@ TEST(stringConvert, oneline_wstring2string)
     std::string s = std::wstring_convert<std::codecvt_utf8<wchar_t>>().to_bytes(str);
     ASSERT_STREQ("Hello World! 你好!", s.c_str());
 }
+
+#ifdef _MSC_VER
+#pragma warning(pop)
+#endif
 
 TEST(split1, simple)
 {
