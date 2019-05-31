@@ -7,3 +7,6 @@
 [submodule "3rd-party/glog"]
 	path = 3rd-party/glog
 	url = https://github.com/google/glog.git
+[submodule "3rd-party/benchmark"]
+	path = 3rd-party/benchmark
+	url = git@github.com:google/benchmark.git
