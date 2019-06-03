@@ -46,6 +46,11 @@ foreach(ONE_BENCH_CPP ${ALL_BENCH_CPP})
     OUTPUT_NAME ${ONE_BENCH_EXEC}
   )
 
-  target_link_libraries(${TARGET_NAME} PRIVATE debug benchmarkd optimized benchmark)
+  target_link_libraries(${TARGET_NAME} PRIVATE benchmark)
+
+  if (MSVC)
+    target_link_libraries(${TARGET_NAME} PRIVATE shlwapi.lib)
+  endif()
+
   add_dependencies(${TARGET_NAME} third-party-benchmark)
 endforeach()
