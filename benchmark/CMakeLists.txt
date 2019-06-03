@@ -1,7 +1,5 @@
 cmake_minimum_required(VERSION 3.1.0 FATAL_ERROR)
-PROJECT(BenchTest VERSION 1.0.0 LANGUAGES CXX)
-
-SET(CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR}/CMakeModules ${CMAKE_MODULE_PATH})
+project(BenchTest VERSION 1.0.0 LANGUAGES CXX)
 
 # https://arne-mertz.de/2018/07/cmake-properties-options/
 if (MSVC)
@@ -15,11 +13,11 @@ endif()
 
 # https://felixmoessbauer.com/blog-reader/include-google-benchmark-test-in-c-project.html
 # https://pixorblog.wordpress.com/2016/05/22/cmake-google-micro-benchmarking/
-INCLUDE(ExternalProject)
+include(ExternalProject)
 
-SET (install_dir ${CMAKE_BINARY_DIR}/3rd-party)
-INCLUDE_DIRECTORIES(${install_dir}/include)
-LINK_DIRECTORIES(${install_dir}/lib)
+set (install_dir ${CMAKE_BINARY_DIR}/3rd-party)
+include_directories(${install_dir}/include)
+link_directories(${install_dir}/lib)
 
 ExternalProject_Add( third-party-benchmark
   SOURCE_DIR        ${CMAKE_CURRENT_LIST_DIR}/../3rd-party/benchmark
@@ -30,17 +28,24 @@ ExternalProject_Add( third-party-benchmark
                     -DBENCHMARK_ENABLE_TESTING=OFF
 )
 
-FILE(GLOB TEST_SRC ${PROJECT_SOURCE_DIR}/*.cpp)
-ADD_EXECUTABLE(BenchTest ${TEST_SRC})
-###############################################################################
-# Title: Enabling C++11 And Later In CMake
-# Web: https://crascit.com/2015/03/28/enabling-cxx11-in-cmake
-###############################################################################
-SET_TARGET_PROPERTIES(BenchTest PROPERTIES 
-  CXX_STANDARD 17
-  CXX_STANDARD_PROPERTIES YES
-  CXX_EXTENSIONS NO
-)
+file(GLOB_RECURSE ALL_BENCH_CPP *.cpp)
+list(FILTER ALL_BENCH_CPP EXCLUDE REGEX "CMakeCXXCompilerId.cpp")
 
-TARGET_LINK_LIBRARIES(BenchTest PRIVATE debug benchmarkd optimized benchmark)
-ADD_DEPENDENCIES(BenchTest third-party-benchmark)
+foreach(ONE_BENCH_CPP ${ALL_BENCH_CPP})
+  get_filename_component(ONE_BENCH_EXEC ${ONE_BENCH_CPP} NAME_WE)
+
+  # Avoid name collision
+  set(TARGET_NAME Bench_${ONE_BENCH_EXEC})
+
+  add_executable(${TARGET_NAME} ${ONE_BENCH_CPP})
+
+  set_target_properties(${TARGET_NAME} PROPERTIES 
+    CXX_STANDARD 17
+    CXX_STANDARD_PROPERTIES YES
+    CXX_EXTENSIONS NO
+    OUTPUT_NAME ${ONE_BENCH_EXEC}
+  )
+
+  target_link_libraries(${TARGET_NAME} PRIVATE debug benchmarkd optimized benchmark)
+  add_dependencies(${TARGET_NAME} third-party-benchmark)
+endforeach()
