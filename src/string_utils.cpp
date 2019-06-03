@@ -172,20 +172,20 @@ class RegexTest : public testing::TestWithParam<std::tuple<std::string, std::str
 };
 
 INSTANTIATE_TEST_SUITE_P(stringMatch, RegexTest,
-                        ::testing::Values(std::tuple<std::string, std::string, bool>("Chen", "Chen Yu", true),
-                                          std::tuple<std::string, std::string, bool>("Chen", "Aran Chen", true),
-                                          std::tuple<std::string, std::string, bool>("chen", "ChengZhi Li", true),
-                                          std::tuple<std::string, std::string, bool>("chen", "CChen Yu", false),
-                                          std::tuple<std::string, std::string, bool>("j c", "Jack Chen", true),
-                                          std::tuple<std::string, std::string, bool>("j c", "Aviva Jia Chen", true),
-                                          std::tuple<std::string, std::string, bool>("av c", "", false),
-                                          std::tuple<std::string, std::string, bool>("", "", true),
-                                          std::tuple<std::string, std::string, bool>("", "abc", true),
-                                          std::tuple<std::string, std::string, bool>("+123", "+12345", true),
-                                          std::tuple<std::string, std::string, bool>("12+3", "12+345", true),
-                                          std::tuple<std::string, std::string, bool>("12-3", "12-345", true),
-                                          std::tuple<std::string, std::string, bool>("12[3", "12[345", true),
-                                          std::tuple<std::string, std::string, bool>("av c", "Aviva Jia Chen", true)));
+                        ::testing::Values(std::make_tuple("Chen", "Chen Yu", true),
+                                          std::make_tuple("Chen", "Aran Chen", true),
+                                          std::make_tuple("chen", "ChengZhi Li", true),
+                                          std::make_tuple("chen", "CChen Yu", false),
+                                          std::make_tuple("j c", "Jack Chen", true),
+                                          std::make_tuple("j c", "Aviva Jia Chen", true),
+                                          std::make_tuple("av c", "", false),
+                                          std::make_tuple("", "", true),
+                                          std::make_tuple("", "abc", true),
+                                          std::make_tuple("+123", "+12345", true),
+                                          std::make_tuple("12+3", "12+345", true),
+                                          std::make_tuple("12-3", "12-345", true),
+                                          std::make_tuple("12[3", "12[345", true),
+                                          std::make_tuple("av c", "Aviva Jia Chen", true)));
 
 TEST_P(RegexTest, one_word)
 {
