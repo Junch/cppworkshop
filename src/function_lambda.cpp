@@ -2,6 +2,7 @@
 #include <functional>
 #include <gtest/gtest.h>
 #include <iostream>
+#include <thread>
 
 namespace function_lambda
 {
@@ -80,7 +81,7 @@ TEST(lambda, size)
     auto f2 = [&ar]() { ar[0] = 1; };
     ASSERT_EQ(sizeof(void *), sizeof(f2));
 
-    auto f3 = [ar]() mutable { ar[0] = 1;};
+    auto f3 = [ar]() mutable { ar[0] = 1; };
     ASSERT_EQ(100, (int)sizeof(f3));
 }
 
@@ -104,6 +105,49 @@ TEST(lambda, copy)
     auto foo2 = foo;
     foo2();
     std::cout << i << std::endl;
+}
+
+///////////////////////////////////////////////////////////////////////////////
+// No. 5
+// Title: Passing this to Lambdas
+// Book: C++17 - the complete guide
+///////////////////////////////////////////////////////////////////////////////
+
+class Data
+{
+  private:
+    std::string name;
+
+  public:
+    Data(const std::string &s) : name(s) {}
+
+    void foo()
+    {
+        [[maybe_unused]] auto l1 = [this] { std::cout << name << '\n'; };
+        [[maybe_unused]] auto l2 = [=] { std::cout << name << '\n'; };
+        [[maybe_unused]] auto l3 = [&] { std::cout << name << '\n'; };
+    }
+
+    auto startThreadWithCopyOfThis() const
+    {
+        using namespace std::literals;
+        std::thread t([*this] {
+            std::this_thread::sleep_for(3s);
+            std::cout << name << '\n';
+        });
+
+        return t;
+    }
+};
+
+TEST(lambda, copy_this)
+{
+    std::thread t;
+    {
+        Data d{"copy this"};
+        t = d.startThreadWithCopyOfThis();
+    } // d is no longer valid
+    t.join();
 }
 
 } // namespace function_lambda
