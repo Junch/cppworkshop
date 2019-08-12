@@ -93,6 +93,7 @@ SET(TEST_SRC ${PROJECT_SOURCE_DIR}/src/async.cpp
              ${PROJECT_SOURCE_DIR}/src/algorithm/leet_1114_print_in_order.cpp
              ${PROJECT_SOURCE_DIR}/src/algorithm/leet_1114_print_in_order_2.cpp
              ${PROJECT_SOURCE_DIR}/src/algorithm/leet_1115_print_foolbar_alternately.cpp
+             ${PROJECT_SOURCE_DIR}/src/algorithm/leet_1116_print_zero_even_odd.cpp
   )
 
 ADD_EXECUTABLE(MainTest ${TEST_SRC})
