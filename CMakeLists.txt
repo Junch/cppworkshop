@@ -91,6 +91,7 @@ SET(TEST_SRC ${PROJECT_SOURCE_DIR}/src/async.cpp
              ${PROJECT_SOURCE_DIR}/src/valgrind.cpp
              ${PROJECT_SOURCE_DIR}/src/variadic_template.cpp
              ${PROJECT_SOURCE_DIR}/src/algorithm/leet_1114_print_in_order.cpp
+             ${PROJECT_SOURCE_DIR}/src/algorithm/leet_1114_print_in_order_2.cpp
   )
 
 ADD_EXECUTABLE(MainTest ${TEST_SRC})

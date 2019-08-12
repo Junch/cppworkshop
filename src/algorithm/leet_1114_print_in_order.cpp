@@ -9,7 +9,11 @@ using namespace std::literals;
 ///////////////////////////////////////////////////////////////////////////////
 // Title: 1114. Print in Order
 // Web: https://leetcode.com/problems/print-in-order
+// Note: This solution will crash on windows
 ///////////////////////////////////////////////////////////////////////////////
+
+namespace leet_1114_print_in_order
+{
 
 void printFirst()
 {
@@ -40,6 +44,10 @@ class Foo
         // printFirst() outputs "first". Do not change or remove this line.
         printFirst();
         m1.unlock();
+
+        // In visual studio there will be assert: unlock of unowned mutex
+        // https://stackoverflow.com/questions/14202094/c11-thread-mutex-implementation-in-vs2012-assertion-fired
+        // An explanation: If the calling thread does not own the mutex, the behavior is undefined.
     }
 
     void second(function<void()> printSecond)
@@ -86,3 +94,5 @@ TEST(leet_1114, 132)
     t2.join();
     t3.join();
 }
+
+} // leet_1114_print_in_order
