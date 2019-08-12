@@ -25,26 +25,31 @@ class FooBar
   private:
     int n;
     std::mutex _mutex;
-    bool foo_printed;
+    bool foo_printed = false;
     std::condition_variable _cv;
 
   public:
-    FooBar(int n) : foo_printed(false) { this->n = n; }
+    FooBar(int n) { this->n = n; }
 
     void foo(function<void()> printFoo)
     {
         for (int i = 0; i < n; i++)
         {
             std::unique_lock lock(_mutex);
-            while (foo_printed)
-            {
-                _cv.wait(lock);
-            }
+            // while (foo_printed)
+            // {
+            //     _cv.wait(lock);
+            // }
+            _cv.wait(lock, [this] { return !foo_printed; });
 
             // printFoo() outputs "foo". Do not change or remove this line.
             printFoo();
 
             foo_printed = true;
+
+            // https://en.cppreference.com/w/cpp/thread/condition_variable
+            // https://stackoverflow.com/questions/17101922/do-i-have-to-acquire-lock-before-calling-condition-variable-notify-one
+            lock.unlock();
             _cv.notify_one();
         }
     }
@@ -54,15 +59,17 @@ class FooBar
         for (int i = 0; i < n; i++)
         {
             std::unique_lock lock(_mutex);
-            while (!foo_printed)
-            {
-                _cv.wait(lock);
-            }
+            // while (!foo_printed)
+            // {
+            //     _cv.wait(lock);
+            // }
+            _cv.wait(lock, [this] { return foo_printed; });
 
             // printBar() outputs "bar". Do not change or remove this line.
             printBar();
 
             foo_printed = false;
+            lock.unlock();
             _cv.notify_one();
         }
     }
@@ -85,6 +92,7 @@ TEST_P(Leet_1115_Test, foobar)
     std::thread t2(&FooBar::bar, &foobar, printBar);
     t1.join();
     t2.join();
+    std::cout << '\n';
 }
 
 } // namespace leet_1115
