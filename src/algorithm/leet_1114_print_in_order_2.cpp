@@ -1,7 +1,7 @@
 #include <functional>
+#include <future>
 #include <gtest/gtest.h>
 #include <iostream>
-#include <future>
 #include <thread>
 using namespace std;
 using namespace std::literals;
@@ -33,9 +33,7 @@ void printThird()
 class Foo
 {
   public:
-    Foo()
-    {
-    }
+    Foo() {}
 
     void first(function<void()> printFirst)
     {
@@ -90,4 +88,4 @@ TEST(leet_1114_2, 132)
     t3.join();
 }
 
-} // leet_1114_print_in_order_2
+} // namespace leet_1114_print_in_order_2
