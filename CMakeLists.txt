@@ -71,7 +71,28 @@ ExternalProject_Add( third-party-glog
   DEPENDS           third-party-gflags
 )
 
-FILE(GLOB TEST_SRC ${PROJECT_SOURCE_DIR}/src/*.cpp)
+#FILE(GLOB TEST_SRC ${PROJECT_SOURCE_DIR}/src/*.cpp)
+SET(TEST_SRC ${PROJECT_SOURCE_DIR}/src/async.cpp
+             ${PROJECT_SOURCE_DIR}/src/cpp_17.cpp
+             ${PROJECT_SOURCE_DIR}/src/function_lambda.cpp
+             ${PROJECT_SOURCE_DIR}/src/function_signature.cpp
+             ${PROJECT_SOURCE_DIR}/src/glog_demo.cpp
+             ${PROJECT_SOURCE_DIR}/src/inline_thread_local.cpp
+             ${PROJECT_SOURCE_DIR}/src/main.cpp
+             ${PROJECT_SOURCE_DIR}/src/map_test.cpp
+             ${PROJECT_SOURCE_DIR}/src/method_chaining.cpp
+             ${PROJECT_SOURCE_DIR}/src/optional.cpp
+             ${PROJECT_SOURCE_DIR}/src/packaged_task.cpp
+             ${PROJECT_SOURCE_DIR}/src/promise.cpp
+             ${PROJECT_SOURCE_DIR}/src/shared_ptr.cpp
+             ${PROJECT_SOURCE_DIR}/src/string_utils.cpp
+             ${PROJECT_SOURCE_DIR}/src/stringftime.cpp
+             ${PROJECT_SOURCE_DIR}/src/thread_pool.cpp
+             ${PROJECT_SOURCE_DIR}/src/valgrind.cpp
+             ${PROJECT_SOURCE_DIR}/src/variadic_template.cpp
+             ${PROJECT_SOURCE_DIR}/src/algorithm/leet_1114_print_in_order.cpp
+  )
+
 ADD_EXECUTABLE(MainTest ${TEST_SRC})
 ###############################################################################
 # Title: Enabling C++11 And Later In CMake
