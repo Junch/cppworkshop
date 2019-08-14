@@ -95,6 +95,7 @@ SET(TEST_SRC ${PROJECT_SOURCE_DIR}/src/async.cpp
              ${PROJECT_SOURCE_DIR}/src/algorithm/leet_1115_print_foolbar_alternately.cpp
              ${PROJECT_SOURCE_DIR}/src/algorithm/leet_1116_print_zero_even_odd.cpp
              ${PROJECT_SOURCE_DIR}/src/algorithm/leet_1117_building_h2o.cpp
+             ${PROJECT_SOURCE_DIR}/src/algorithm/treenode.cpp
   )
 
 ADD_EXECUTABLE(MainTest ${TEST_SRC})
