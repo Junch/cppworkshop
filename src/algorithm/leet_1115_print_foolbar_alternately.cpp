@@ -75,16 +75,16 @@ class FooBar
     }
 };
 
-class Leet_1115_Test : public testing::TestWithParam<int>
+class leet_1115_test : public testing::TestWithParam<int>
 {
   public:
     void SetUp() override {}
     void TearDown() override {}
 };
 
-INSTANTIATE_TEST_SUITE_P(leet, Leet_1115_Test, ::testing::Values(1, 2, 5));
+INSTANTIATE_TEST_SUITE_P(leet, leet_1115_test, ::testing::Values(1, 2, 5));
 
-TEST_P(Leet_1115_Test, foobar)
+TEST_P(leet_1115_test, foobar)
 {
     FooBar foobar(GetParam());
     std::thread t1(&FooBar::foo, &foobar, printFoo);

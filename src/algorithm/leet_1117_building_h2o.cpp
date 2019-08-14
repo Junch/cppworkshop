@@ -55,16 +55,16 @@ class H2O
     std::condition_variable _cv;
 };
 
-class Leet_1117_Test : public testing::TestWithParam<int>
+class leet_1117_test : public testing::TestWithParam<int>
 {
   public:
     void SetUp() override {}
     void TearDown() override {}
 };
 
-INSTANTIATE_TEST_SUITE_P(leet, Leet_1117_Test, ::testing::Values(1, 2));
+INSTANTIATE_TEST_SUITE_P(leet, leet_1117_test, ::testing::Values(1, 2));
 
-TEST_P(Leet_1117_Test, building_h2o)
+TEST_P(leet_1117_test, building_h2o)
 {
     H2O obj;
     int number = GetParam();

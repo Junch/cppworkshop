@@ -64,17 +64,17 @@ class Foo
     std::promise<void> p2;
 };
 
-class Leet_1114_Test : public testing::TestWithParam<std::array<int, 3>>
+class leet_1114_test : public testing::TestWithParam<std::array<int, 3>>
 {
   public:
     void SetUp() override {}
     void TearDown() override {}
 };
 
-INSTANTIATE_TEST_SUITE_P(leet, Leet_1114_Test,
+INSTANTIATE_TEST_SUITE_P(leet, leet_1114_test,
                          ::testing::Values(std::array{1, 2, 3}, std::array{3, 1, 2}, std::array{3, 2, 1}));
 
-TEST_P(Leet_1114_Test, print_in_order)
+TEST_P(leet_1114_test, print_in_order)
 {
     auto a = GetParam();
     Foo foo;

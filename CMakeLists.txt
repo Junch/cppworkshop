@@ -90,12 +90,13 @@ SET(TEST_SRC ${PROJECT_SOURCE_DIR}/src/async.cpp
              ${PROJECT_SOURCE_DIR}/src/thread_pool.cpp
              ${PROJECT_SOURCE_DIR}/src/valgrind.cpp
              ${PROJECT_SOURCE_DIR}/src/variadic_template.cpp
+             ${PROJECT_SOURCE_DIR}/src/algorithm/treenode.cpp
              ${PROJECT_SOURCE_DIR}/src/algorithm/leet_1114_print_in_order.cpp
              ${PROJECT_SOURCE_DIR}/src/algorithm/leet_1114_print_in_order_2.cpp
              ${PROJECT_SOURCE_DIR}/src/algorithm/leet_1115_print_foolbar_alternately.cpp
              ${PROJECT_SOURCE_DIR}/src/algorithm/leet_1116_print_zero_even_odd.cpp
              ${PROJECT_SOURCE_DIR}/src/algorithm/leet_1117_building_h2o.cpp
-             ${PROJECT_SOURCE_DIR}/src/algorithm/treenode.cpp
+             ${PROJECT_SOURCE_DIR}/src/algorithm/leet_654_maximum_binary_tree.cpp
   )
 
 ADD_EXECUTABLE(MainTest ${TEST_SRC})

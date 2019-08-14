@@ -101,16 +101,16 @@ class ZeroEvenOdd
     }
 };
 
-class Leet_1116_Test : public testing::TestWithParam<int>
+class leet_1116_test : public testing::TestWithParam<int>
 {
   public:
     void SetUp() override {}
     void TearDown() override {}
 };
 
-INSTANTIATE_TEST_SUITE_P(leet, Leet_1116_Test, ::testing::Values(1, 2, 5));
+INSTANTIATE_TEST_SUITE_P(leet, leet_1116_test, ::testing::Values(1, 2, 5));
 
-TEST_P(Leet_1116_Test, zero_even_odd)
+TEST_P(leet_1116_test, zero_even_odd)
 {
     ZeroEvenOdd obj(GetParam());
     std::thread t1(&ZeroEvenOdd::zero, &obj, printNumber);
