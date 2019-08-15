@@ -1,9 +1,9 @@
 #include <gtest/gtest.h>
-#include <string>
 #include <memory>
+#include <string>
 
 #ifdef _WIN32
-    #pragma warning(disable : 4100)
+#pragma warning(disable : 4100)
 #endif
 
 namespace function_signature

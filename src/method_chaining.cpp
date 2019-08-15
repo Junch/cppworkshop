@@ -45,7 +45,7 @@ TEST(method_chaining, simple)
 // Web: https://helloacm.com/c-object-method-chaining/
 ///////////////////////////////////////////////////////////////////////////////
 
-class NewPrice: public std::enable_shared_from_this<NewPrice>
+class NewPrice : public std::enable_shared_from_this<NewPrice>
 {
   public:
     NewPrice(int v) : v_(v) {}

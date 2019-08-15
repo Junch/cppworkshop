@@ -171,6 +171,7 @@ class RegexTest : public testing::TestWithParam<std::tuple<std::string, std::str
     void TearDown() override {}
 };
 
+// clang-format off
 INSTANTIATE_TEST_SUITE_P(stringMatch, RegexTest,
                         ::testing::Values(std::make_tuple("Chen", "Chen Yu", true),
                                           std::make_tuple("Chen", "Aran Chen", true),
@@ -186,6 +187,7 @@ INSTANTIATE_TEST_SUITE_P(stringMatch, RegexTest,
                                           std::make_tuple("12-3", "12-345", true),
                                           std::make_tuple("12[3", "12[345", true),
                                           std::make_tuple("av c", "Aviva Jia Chen", true)));
+// clang-format on
 
 TEST_P(RegexTest, one_word)
 {

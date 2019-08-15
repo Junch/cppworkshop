@@ -43,7 +43,10 @@ class static_string
   public:
     typedef const char *const_iterator;
 
-    template <std::size_t N> CONSTEXPR11_TN static_string(const char (&a)[N]) NOEXCEPT_TN : p_(a), sz_(N - 1) {}
+    template <std::size_t N>
+    CONSTEXPR11_TN static_string(const char (&a)[N]) NOEXCEPT_TN : p_(a), sz_(N - 1)
+    {
+    }
 
     CONSTEXPR11_TN static_string(const char *p, std::size_t N) NOEXCEPT_TN : p_(p), sz_(N) {}
 
@@ -61,7 +64,8 @@ inline std::ostream &operator<<(std::ostream &os, static_string const &s)
     return os.write(s.data(), s.size());
 }
 
-template <class T> CONSTEXPR14_TN static_string type_name()
+template <class T>
+CONSTEXPR14_TN static_string type_name()
 {
 #ifdef __clang__
     static_string p = __PRETTY_FUNCTION__;

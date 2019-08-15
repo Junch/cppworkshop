@@ -1,13 +1,13 @@
-#include <vector>
 #include <gtest/gtest.h>
+#include <vector>
 
 #ifdef _WIN32
 #pragma warning(disable : 4068 4700)
 #endif
 
-#if defined(_WIN32) && defined(_DEBUG) 
-    #define DEBUG_NEW new(_NORMAL_BLOCK, __FILE__, __LINE__)
-    #define new DEBUG_NEW
+#if defined(_WIN32) && defined(_DEBUG)
+#define DEBUG_NEW new (_NORMAL_BLOCK, __FILE__, __LINE__)
+#define new DEBUG_NEW
 #endif
 
 namespace valgrind
@@ -24,16 +24,17 @@ TEST(valgrind, use_uninitialized_values)
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wuninitialized"
     bool condition;
-    if (condition) {
-        //Do the thing
+    if (condition)
+    {
+        // Do the thing
     }
 #pragma GCC diagnostic pop
 }
 
 TEST(valgrind, accessing_wrong_memory)
 {
-    std::vector<int> v { 1, 2, 3, 4, 5 };
-    v[5] = 0; 
+    std::vector<int> v{1, 2, 3, 4, 5};
+    v[5] = 0;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -49,4 +50,4 @@ TEST(valgrind, memory_leak)
     // Should fail as 7 bytes are not freed.
 }
 
-}
+} // namespace valgrind

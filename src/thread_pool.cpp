@@ -35,9 +35,11 @@ class ThreadPool
                     std::function<void()> task;
                     {
                         std::unique_lock<std::mutex> lock{task_lock_};
+                        // clang-format off
                         task_cv_.wait(lock, [this] {
                             return (stoped_.load() || !tasks_.empty());
-                        }); // wait till there is task or stoped
+                        }); // wait till there is task or stopped
+                        // clang-format on
                         if (stoped_ && tasks_.empty())
                         {
                             return;
