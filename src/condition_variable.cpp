@@ -1,5 +1,11 @@
+#ifdef _WIN32
+#define _CRT_SECURE_NO_WARNINGS
+#endif
+#include <chrono>
 #include <condition_variable>
+#include <ctime>
 #include <gtest/gtest.h>
+#include <iomanip>
 #include <mutex>
 #include <thread>
 
@@ -25,14 +31,23 @@ void read()
     std::unique_lock<std::mutex> lock(mtx);
     for (int i = 0; i < 10; ++i)
     {
+        auto start = std::chrono::high_resolution_clock::now();
         std::cv_status status = cv.wait_for(lock, std::chrono::milliseconds{2000});
+        auto elapsed = std::chrono::high_resolution_clock::now() - start;
+        long long microseconds = std::chrono::duration_cast<std::chrono::microseconds>(elapsed).count();
+
+        auto timenow = std::chrono::system_clock::to_time_t(std::chrono::system_clock::now());
+        struct std::tm *ptm = std::localtime(&timenow);
+
         if (status == std::cv_status::no_timeout)
         {
-            std::cout << std::this_thread::get_id() << " no_timeout ready=" << ready << '\n';
+            std::cout << std::put_time(ptm, "%b %d %H:%M:%S %Y") << " elapsed=" << microseconds << "us ready=" << ready
+                      << " no_timeout\n";
         }
         else
         {
-            std::cout << std::this_thread::get_id() << " timeout\n";
+            std::cout << std::put_time(ptm, "%b %d %H:%M:%S %Y") << " elapsed=" << microseconds << "us ready=" << ready
+                      << " timeout\n";
         }
     }
 }
@@ -42,7 +57,7 @@ TEST(condition_variable, wait_for)
     using namespace std::chrono_literals;
 
     std::thread t(read);
-    std::this_thread::sleep_for(1000ms);
+    std::this_thread::sleep_for(3000ms);
     write();
     t.join();
 }
