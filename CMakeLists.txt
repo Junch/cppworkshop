@@ -76,6 +76,7 @@ SET(TEST_SRC ${PROJECT_SOURCE_DIR}/src/async.cpp
              ${PROJECT_SOURCE_DIR}/src/cpp_17.cpp
              ${PROJECT_SOURCE_DIR}/src/function_lambda.cpp
              ${PROJECT_SOURCE_DIR}/src/function_signature.cpp
+             ${PROJECT_SOURCE_DIR}/src/gflags_demo.cpp
              ${PROJECT_SOURCE_DIR}/src/glog_demo.cpp
              ${PROJECT_SOURCE_DIR}/src/inline_thread_local.cpp
              ${PROJECT_SOURCE_DIR}/src/main.cpp
