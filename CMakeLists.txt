@@ -100,6 +100,8 @@ SET(TEST_SRC ${PROJECT_SOURCE_DIR}/src/async.cpp
              ${PROJECT_SOURCE_DIR}/src/algorithm/leet_1117_building_h2o.cpp
              ${PROJECT_SOURCE_DIR}/src/algorithm/leet_654_maximum_binary_tree.cpp
              ${PROJECT_SOURCE_DIR}/src/algorithm/leet_914_x_of_a_kind_in_a_deck_of_cards.cpp
+             ${PROJECT_SOURCE_DIR}/src/algorithm/leet_350_intersection_of_two_arrays_ii.cpp
+             ${PROJECT_SOURCE_DIR}/src/algorithm/leet_134_gas_station.cpp
   )
 
 ADD_EXECUTABLE(MainTest ${TEST_SRC})
