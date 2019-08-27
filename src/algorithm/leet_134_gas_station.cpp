@@ -14,9 +14,33 @@ namespace leet_134
 class Solution
 {
   public:
-    int canCompleteCircuit(vector<int>& /*gas*/, vector<int>& /*cost*/)
+    int canCompleteCircuit(vector<int> &gas, vector<int> &cost)
     {
-        return 0;
+        int len = gas.size();
+
+        for (int start = 0; start < len; ++start)
+        {
+            int remaining = 0;
+            int i = start;
+            for (int j = 0; j < len; ++j, ++i)
+            {
+                i = i % len;
+                remaining += gas[i];
+                remaining -= cost[i];
+
+                if (remaining < 0)
+                {
+                    break;
+                }
+            }
+
+            if (remaining >= 0)
+            {
+                return start;
+            }
+        }
+
+        return -1;
     }
 };
 
@@ -44,4 +68,4 @@ TEST_P(leet_134_test, test)
     ASSERT_EQ(result, c);
 }
 
-}
+} // namespace leet_134

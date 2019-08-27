@@ -1,4 +1,3 @@
-#include <gmock/gmock.h>
 #include <gtest/gtest.h>
 #include <vector>
 
@@ -15,10 +14,35 @@ namespace leet_350
 class Solution
 {
   public:
-    vector<int> intersect(vector<int> & /*nums1*/, vector<int> & /*nums2*/)
+    vector<int> intersect(vector<int> &nums1, vector<int> &nums2)
     {
-        vector<int> a;
-        return a;
+        std::sort(nums1.begin(), nums1.end());
+        std::sort(nums2.begin(), nums2.end());
+
+        size_t len1 = nums1.size();
+        size_t len2 = nums2.size();
+
+        vector<int> result;
+
+        for (size_t i = 0, j = 0; i < len1 && j < len2;)
+        {
+            if (nums1[i] == nums2[j])
+            {
+                result.push_back(nums1[i]);
+                ++i;
+                ++j;
+            }
+            else if (nums1[i] < nums2[j])
+            {
+                ++i;
+            }
+            else
+            {
+                ++j;
+            }
+        }
+
+        return result;
     }
 };
 
