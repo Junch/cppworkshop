@@ -46,7 +46,7 @@ class Solution
     }
 };
 
-class leet_350_test : public testing::TestWithParam<std::tuple<std::vector<int>, std::vector<int>, std::vector<int>>>
+class leet_350_test : public testing::TestWithParam<std::tuple<std::vector<int>, vector<int>, vector<int>>>
 {
   public:
     void SetUp() override {}
@@ -55,8 +55,8 @@ class leet_350_test : public testing::TestWithParam<std::tuple<std::vector<int>,
 
 // clang-format off
 INSTANTIATE_TEST_SUITE_P(leet, leet_350_test, ::testing::Values(
-    std::make_tuple(std::vector<int>{1, 2, 2, 1}, std::vector<int>{2, 2}, std::vector<int>{2, 2}),
-    std::make_tuple(std::vector<int>{4, 9, 5}, std::vector<int>{9, 4, 9, 8, 4}, std::vector<int>{4, 9})
+    std::make_tuple(vector<int>{1, 2, 2, 1}, vector<int>{2, 2}, vector<int>{2, 2}),
+    std::make_tuple(vector<int>{4, 9, 5}, vector<int>{9, 4, 9, 8, 4}, vector<int>{4, 9})
 ));
 // clang-format on
 

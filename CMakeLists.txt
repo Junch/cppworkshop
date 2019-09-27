@@ -102,6 +102,9 @@ SET(TEST_SRC ${PROJECT_SOURCE_DIR}/src/async.cpp
              ${PROJECT_SOURCE_DIR}/src/algorithm/leet_914_x_of_a_kind_in_a_deck_of_cards.cpp
              ${PROJECT_SOURCE_DIR}/src/algorithm/leet_350_intersection_of_two_arrays_ii.cpp
              ${PROJECT_SOURCE_DIR}/src/algorithm/leet_134_gas_station.cpp
+             ${PROJECT_SOURCE_DIR}/src/algorithm/leet_334_increasing_triplet_subsequence.cpp
+             ${PROJECT_SOURCE_DIR}/src/algorithm/leet_239_sliding_window_maximum.cpp
+             ${PROJECT_SOURCE_DIR}/src/algorithm/leet_218_the_skyline_problem.cpp
   )
 
 ADD_EXECUTABLE(MainTest ${TEST_SRC})
