@@ -93,6 +93,7 @@ SET(TEST_SRC ${PROJECT_SOURCE_DIR}/src/async.cpp
              ${PROJECT_SOURCE_DIR}/src/variadic_template.cpp
              ${PROJECT_SOURCE_DIR}/src/condition_variable.cpp
              ${PROJECT_SOURCE_DIR}/src/hash_test.cpp
+             ${PROJECT_SOURCE_DIR}/src/mock_test.cpp
              ${PROJECT_SOURCE_DIR}/src/algorithm/treenode.cpp
              ${PROJECT_SOURCE_DIR}/src/algorithm/leet_1114_print_in_order.cpp
              ${PROJECT_SOURCE_DIR}/src/algorithm/leet_1114_print_in_order_2.cpp
@@ -119,7 +120,7 @@ SET_TARGET_PROPERTIES(MainTest PROPERTIES
   CXX_EXTENSIONS NO
 )
 
-TARGET_LINK_LIBRARIES(MainTest PRIVATE gtest)
+TARGET_LINK_LIBRARIES(MainTest PRIVATE gtest gmock)
 TARGET_LINK_LIBRARIES(MainTest PRIVATE ${CMAKE_THREAD_LIBS_INIT})
 
 if (MSVC)
