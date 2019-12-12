@@ -1,4 +1,4 @@
-#include <array>
+﻿#include <array>
 #include <codecvt>
 #include <gtest/gtest.h>
 #include <memory>
@@ -116,10 +116,17 @@ bool stringMatch(const std::string &searchString, const std::string &userName)
 // Web: https://stackoverflow.com/questions/4804298/how-to-convert-wstring-into-string
 ///////////////////////////////////////////////////////////////////////////////
 
+#ifdef _MSC_VER
+#pragma warning(push)
+#pragma warning(disable : 4566)
+#endif
+
 TEST(stringConvert, string2wstring)
 {
-    std::string str("Hello World! 你好!");
+    std::string str(u8"Hello World! 你好!");
     std::wstring s = s2ws(str);
+    // MessageBoxW(NULL, s.c_str(), L"MessageBoxW", MB_OK);
+    // MessageBoxA(NULL, str.c_str(), "MessageBoxA", MB_OK);
     ASSERT_STREQ(L"Hello World! 你好!", s.c_str());
 }
 
@@ -127,7 +134,7 @@ TEST(stringConvert, wstring2string)
 {
     std::wstring str(L"Hello World! 你好!");
     std::string s = ws2s(str);
-    ASSERT_STREQ("Hello World! 你好!", s.c_str());
+    ASSERT_STREQ(u8"Hello World! 你好!", s.c_str());
 }
 
 #ifdef _MSC_VER
@@ -137,7 +144,7 @@ TEST(stringConvert, wstring2string)
 
 TEST(stringConvert, oneline_string2wstring)
 {
-    std::string str("Hello World! 你好!");
+    std::string str(u8"Hello World! 你好!");
     std::wstring s = std::wstring_convert<std::codecvt_utf8<wchar_t>>().from_bytes(str);
     ASSERT_STREQ(L"Hello World! 你好!", s.c_str());
 }
@@ -146,10 +153,11 @@ TEST(stringConvert, oneline_wstring2string)
 {
     std::wstring str(L"Hello World! 你好!");
     std::string s = std::wstring_convert<std::codecvt_utf8<wchar_t>>().to_bytes(str);
-    ASSERT_STREQ("Hello World! 你好!", s.c_str());
+    ASSERT_STREQ(u8"Hello World! 你好!", s.c_str());
 }
 
 #ifdef _MSC_VER
+#pragma warning(pop)
 #pragma warning(pop)
 #endif
 
