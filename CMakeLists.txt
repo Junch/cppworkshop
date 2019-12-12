@@ -11,6 +11,7 @@ if (MSVC)
   # warning level 4 and all warnings as errors
   add_compile_options(/W4 /WX)
   add_compile_options(/D_CRTDBG_MAP_ALLOC)
+  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /wd4100") # glog introduce a warning
 else()
   # lots of warnings and all warnings as errors
   add_compile_options(-Wall -Wextra -pedantic -Werror)
