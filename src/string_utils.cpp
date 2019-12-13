@@ -206,4 +206,33 @@ TEST_P(RegexTest, one_word)
     ASSERT_EQ(bMatch, stringMatch(serachString, userName));
 }
 
+#ifdef _WIN32
+#include <Windows.h>
+#pragma comment(lib, "Rpcrt4")
+
+// https://stackoverflow.com/questions/1327157/whats-the-c-version-of-guid-newguid
+// https://stackoverflow.com/questions/24981119/c-uuid-to-stl-string/24981146
+std::string genUuid()
+{
+    std::string uuidStr;
+
+    UUID uuid{0};
+    UuidCreate(&uuid);
+    RPC_CSTR pUIDStr = NULL;
+    if (UuidToStringA(&uuid, &pUIDStr) == RPC_S_OK)
+    {
+        uuidStr = (char *)pUIDStr;
+        RpcStringFreeA(&pUIDStr);
+    }
+
+    return uuidStr;
+}
+
+TEST(uuid, create)
+{
+    printf("%s\n", genUuid().c_str());
+}
+
+#endif
+
 } // namespace string_utils
