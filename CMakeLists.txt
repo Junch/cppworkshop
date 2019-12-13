@@ -14,7 +14,7 @@ if (MSVC)
   set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /wd4100") # glog introduce a warning
 else()
   # lots of warnings and all warnings as errors
-  add_compile_options(-Wall -Wextra -pedantic -Werror)
+  add_compile_options(-Wall -Wextra -pedantic -Werror -Wno-unused-parameter -Wno-gnu-zero-variadic-macro-arguments)
 endif()
 
 IF (sanitize)
