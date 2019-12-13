@@ -14,7 +14,8 @@ if (MSVC)
   set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /wd4100") # glog introduce a warning
 else()
   # lots of warnings and all warnings as errors
-  add_compile_options(-Wall -Wextra -pedantic -Werror -Wno-unused-parameter -Wno-gnu-zero-variadic-macro-arguments)
+  # https://stackoverflow.com/questions/15053776/how-do-you-disable-the-unused-variable-warnings-coming-out-of-gcc-in-3rd-party-c
+  add_compile_options(-Wall -Wextra -pedantic -Werror -Wno-unused-parameter)
 endif()
 
 IF (sanitize)
