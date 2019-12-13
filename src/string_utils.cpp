@@ -5,6 +5,13 @@
 #include <regex>
 #include <stdarg.h>
 
+#ifdef _WIN32
+#include <Windows.h>
+#pragma comment(lib, "Rpcrt4")
+#else
+#include <uuid/uuid.h>
+#endif
+
 namespace string_utils
 {
 
@@ -207,32 +214,46 @@ TEST_P(RegexTest, one_word)
 }
 
 #ifdef _WIN32
-#include <Windows.h>
-#pragma comment(lib, "Rpcrt4")
 
 // https://stackoverflow.com/questions/1327157/whats-the-c-version-of-guid-newguid
 // https://stackoverflow.com/questions/24981119/c-uuid-to-stl-string/24981146
 std::string genUuid()
 {
-    std::string uuidStr;
+    std::string uuidString;
 
     UUID uuid{0};
     UuidCreate(&uuid);
     RPC_CSTR pUIDStr = NULL;
     if (UuidToStringA(&uuid, &pUIDStr) == RPC_S_OK)
     {
-        uuidStr = (char *)pUIDStr;
+        uuidString = (char *)pUIDStr;
         RpcStringFreeA(&pUIDStr);
     }
 
-    return uuidStr;
+    return uuidString;
 }
+
+#else
+
+std::string genUuid()
+{
+    std::string uuidString;
+
+    uuid_t uuid;
+    char buffer[40];
+
+    uuid_generate_random(uuid);
+    uuid_unparse(uuid, buffer);
+    uuidString = buffer;
+
+    return uuidString;
+}
+
+#endif
 
 TEST(uuid, create)
 {
     printf("%s\n", genUuid().c_str());
 }
-
-#endif
 
 } // namespace string_utils
