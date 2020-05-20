@@ -53,3 +53,54 @@ TEST(shared_ptr, value_vs_reference)
         std::cout << "Passing by value takes micro-seconds: " << delta.count() << '\n';
     }
 }
+
+TEST(shared_ptr, execute_code_on_block_exit)
+{
+    // https://www.boost.org/doc/libs/1_57_0/libs/smart_ptr/sp_techniques.html
+    // Smart Pointer Programming Techniques
+    // Using shared_ptr to execute code on block exit
+
+    std::shared_ptr<void> guard(static_cast<void *>(0), [](void *p) { printf("It will be executed on exit of this block\n"); });
+
+    printf("It will be executed first\n");
+}
+
+template <class T>
+class pointer
+{
+  private:
+    T *p_;
+
+  public:
+    explicit pointer(T *p) : p_(p) {}
+
+    std::shared_ptr<T> operator->() const
+    {
+        p_->prefix();
+        return std::shared_ptr<T>(p_, std::mem_fn(&T::suffix));
+    }
+};
+
+class X
+{
+  private:
+    void prefix() { printf("prefix\n"); }
+
+    void suffix() { printf("suffix\n"); }
+
+    friend class pointer<X>;
+
+  public:
+    void f() { printf("f\n"); }
+
+    void g() { printf("g\n"); }
+};
+
+TEST(shared_ptr, wrap_member_function_calls)
+{
+    X x;
+    pointer<X> px(&x);
+
+    px->f();
+    px->g();
+}

@@ -1,4 +1,5 @@
 ﻿#include <array>
+#include <cctype>
 #include <codecvt>
 #include <gtest/gtest.h>
 #include <memory>
@@ -7,6 +8,7 @@
 
 #ifdef _WIN32
 #include <Windows.h>
+#include <atlstr.h>
 #pragma comment(lib, "Rpcrt4")
 #else
 #include <uuid/uuid.h>
@@ -255,5 +257,153 @@ TEST(uuid, create)
 {
     printf("%s\n", genUuid().c_str());
 }
+
+// https://stackoverflow.com/questions/216823/whats-the-best-way-to-trim-stdstring
+// https://stackoverflow.com/questions/44973435/stdptr-fun-replacement-for-c17
+static inline std::string rtrim(std::string s)
+{
+    int pos = static_cast<int>(s.length() - 1);
+    while (pos >= 0 && std::isspace(s[pos]))
+    {
+        --pos;
+    }
+
+    s.erase(pos + 1);
+    return s;
+}
+
+static bool phone_match(const std::string &phone, const std::string &searchQuery)
+{
+    std::string phone_trimed = rtrim(phone);
+    std::size_t found = phone_trimed.rfind(searchQuery);
+    if (found == std::string::npos)
+        return false;
+
+    return found + searchQuery.length() == phone_trimed.length();
+}
+
+TEST(string, rtrim)
+{
+    {
+        std::string phone{"133 6197 \t"};
+        auto ret = rtrim(phone);
+        ASSERT_STREQ(ret.c_str(), "133 6197");
+    }
+
+    {
+        std::string phone{"133 6197"};
+        auto ret = rtrim(phone);
+        ASSERT_STREQ(ret.c_str(), "133 6197");
+    }
+
+    {
+        std::string phone;
+        auto ret = rtrim(phone);
+        ASSERT_STREQ(ret.c_str(), "");
+    }
+}
+
+TEST(string, phone_match)
+{
+    {
+        std::string phone{"133 6197 \t"};
+        std::string searchQuery{"6197"};
+        ASSERT_TRUE(phone_match(phone, searchQuery));
+    }
+
+    {
+        std::string phone{"133 6197"};
+        std::string searchQuery{"6197"};
+        ASSERT_TRUE(phone_match(phone, searchQuery));
+    }
+
+    {
+        std::string phone{"133 6197"};
+        std::string searchQuery{"619"};
+        ASSERT_FALSE(phone_match(phone, searchQuery));
+    }
+}
+
+#ifdef _WIN32
+
+// https://blog.csdn.net/leitianjun/article/details/5605410
+// https://onlineunicodetools.com/convert-unicode-to-utf8
+// https://onlineunicodetools.com/convert-unicode-to-utf16
+
+std::string WidestringToUTF8(const CStringW &wstr)
+{
+    if (wstr.IsEmpty())
+    {
+        return std::string();
+    }
+
+    int utf8len = WideCharToMultiByte(CP_UTF8, 0, wstr, wstr.GetLength(), NULL, 0, NULL, NULL);
+
+    //  The solution commented is also OK
+    // std::unique_ptr<char[]> buf(new char[size]);
+    // WideCharToMultiByte(CP_UTF8, 0, wstr, wstr.GetLength(), buf.get(), size, NULL, NULL);
+    // return std::string(buf.get());
+
+    std::string utf8String(utf8len, 0);
+    WideCharToMultiByte(CP_UTF8, 0, wstr, wstr.GetLength(), &utf8String[0], utf8len, NULL, NULL);
+    return utf8String;
+}
+
+CStringW UTF8ToWidestring(const std::string &s)
+{
+    CStringW utf16String;
+    int size_needed = ::MultiByteToWideChar(CP_UTF8, 0, &s[0], s.length() + 1, NULL, 0);
+    // The solution commented is also OK
+    // std::unique_ptr<wchar_t[]> buf(new wchar_t[size_needed]);
+    // ::MultiByteToWideChar(CP_UTF8, 0, &s[0], -1, buf.get(), size_needed);
+    // return CStringW(buf.get());
+
+    ::MultiByteToWideChar(CP_UTF8, 0, &s[0], s.length() + 1, utf16String.GetBufferSetLength(size_needed), size_needed);
+    return utf16String;
+}
+
+TEST(string, CStringW_2_UTF8_FAIL)
+{
+    std::string utf8str{u8"李世民☹"};
+    CString utf16str{L"李世民☹"};
+
+    USES_CONVERSION;
+    std::string temp = T2A(utf16str.GetBuffer());
+    ASSERT_STRNE(temp.c_str(), utf8str.c_str());
+}
+
+TEST(string, UTF8_2_CStringW_FAIL)
+{
+    std::string utf8str{u8"李世民☹"};
+    CString utf16str{L"李世民☹"};
+
+    USES_CONVERSION;
+    CString temp = A2W(utf8str.c_str());
+    ASSERT_STRNE(temp.GetString(), utf16str.GetString());
+}
+
+TEST(string, CStringW_2_UTF8)
+{
+    std::string utf8str{u8"李世民☹"};
+    CString utf16str{L"李世民☹"};
+
+    std::string temp = WidestringToUTF8(utf16str);
+    ASSERT_STREQ(temp.c_str(), utf8str.c_str());
+}
+
+TEST(string, UTF8_2_CStringW)
+{
+    std::string utf8str{u8"李世民☹"};
+    CString utf16str{L"李世民☹"};
+
+    CString temp = UTF8ToWidestring(utf8str);
+    ASSERT_STREQ(temp.GetString(), utf16str.GetString());
+
+    utf8str.clear();
+    temp = UTF8ToWidestring(utf8str);
+    ASSERT_STREQ(temp.GetString(), CString().GetString());
+}
+
+#endif
 
 } // namespace string_utils
