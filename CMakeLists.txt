@@ -95,6 +95,7 @@ SET(TEST_SRC ${PROJECT_SOURCE_DIR}/src/async.cpp
              ${PROJECT_SOURCE_DIR}/src/condition_variable.cpp
              ${PROJECT_SOURCE_DIR}/src/hash_test.cpp
              ${PROJECT_SOURCE_DIR}/src/mock_test.cpp
+             ${PROJECT_SOURCE_DIR}/src/random.cpp
              ${PROJECT_SOURCE_DIR}/src/algorithm/treenode.cpp
              ${PROJECT_SOURCE_DIR}/src/algorithm/leet_1114_print_in_order.cpp
              ${PROJECT_SOURCE_DIR}/src/algorithm/leet_1114_print_in_order_2.cpp
