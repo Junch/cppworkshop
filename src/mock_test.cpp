@@ -23,6 +23,11 @@ class Turtle
     virtual bool GetInfo(std::string &name, int &age) const = 0;
 };
 
+#if !defined _MSC_VER
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wgnu-zero-variadic-macro-arguments"
+#endif
+
 class MockTurtle : public Turtle
 {
   public:
@@ -35,6 +40,10 @@ class MockTurtle : public Turtle
     MOCK_METHOD(int, GetY, (), (const));
     MOCK_METHOD(bool, GetInfo, (std::string &name, int &age), (const));
 };
+
+#if !defined _MSC_VER
+#pragma GCC diagnostic pop
+#endif
 
 class Painter
 {
