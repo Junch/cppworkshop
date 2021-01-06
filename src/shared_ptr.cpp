@@ -1,6 +1,7 @@
 #include <chrono>
 #include <gtest/gtest.h>
 #include <memory>
+#include <thread>
 
 ///////////////////////////////////////////////////////////////////////////////
 // No. 1
@@ -61,8 +62,32 @@ TEST(shared_ptr, execute_code_on_block_exit)
     // Using shared_ptr to execute code on block exit
 
     std::shared_ptr<void> guard(static_cast<void *>(0), [](void *p) { printf("It will be executed on exit of this block\n"); });
-
+    // std::shared_ptr<int> guard(NULL, [](void *p) { printf("It will be executed on exit of this block\n"); });
+   
     printf("It will be executed first\n");
+}
+
+TEST(shared_ptr, scope_guard)
+{
+    // https://www.boost.org/doc/libs/1_57_0/libs/smart_ptr/sp_techniques.html
+    // Smart Pointer Programming Techniques
+    // Using shared_ptr to execute code on block exit
+
+    // https://stackoverflow.com/questions/23270078/test-a-specific-exception-type-is-thrown-and-the-exception-has-the-right-propert
+    // https://stackoverflow.com/questions/10270328/the-simplest-and-neatest-c11-scopeguard
+
+    using namespace std::chrono_literals;
+
+    EXPECT_THROW({
+        std::thread trd([](){
+            std::this_thread::sleep_for(1000ms);
+            printf("run in work thread\n");
+        });
+
+        std::shared_ptr<std::thread> guard(&trd, [](std::thread* p) {p->join();});
+
+        throw std::runtime_error("meet an execption!");
+    }, std::runtime_error);
 }
 
 template <class T>
