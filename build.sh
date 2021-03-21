@@ -22,7 +22,7 @@ REV=`tput smso`
 function HELP {
   echo -e "${REV}Basic usage:${NORM} ${BOLD}$SCRIPT${NORM}"\\n
   echo "${REV}-s${NORM} --Sets option ${BOLD}SANITIZE${NORM} ON."
-  echo "${REV}-c${NORM} --Sets option ${BOLD}OVERAGE${NORM} ON."
+  echo "${REV}-c${NORM} --Sets option ${BOLD}COVERAGE${NORM} ON."
   echo "${REV}-v${NORM} --Sets option ${BOLD}VEROSE${NORM} ON."
   echo "${REV}-d${NORM} --Sets option ${BOLD}DEBUG${NORM} ON."
   echo -e "${REV}-h${NORM} --Displays this help message. No further functions are performed."\\n
