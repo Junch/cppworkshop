@@ -11,7 +11,11 @@ if (MSVC)
   # warning level 4 and all warnings as errors
   add_compile_options(/W4 /WX)
   add_compile_options(/D_CRTDBG_MAP_ALLOC)
-  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /wd4100") # glog introduce a warning
+  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /wd4100 /wd4740") # glog introduce a warning
+  # make the Release version create a PDB
+  SET(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} /Zi")
+  # # minimize the size or the resulting EXE
+  SET(CMAKE_EXE_LINKER_FLAGS_RELEASE "${CMAKE_EXE_LINKER_FLAGS_RELEASE} /DEBUG /OPT:REF /OPT:ICF")
 else()
   # lots of warnings and all warnings as errors
   # https://stackoverflow.com/questions/15053776/how-do-you-disable-the-unused-variable-warnings-coming-out-of-gcc-in-3rd-party-c
@@ -112,6 +116,12 @@ SET(TEST_SRC ${PROJECT_SOURCE_DIR}/src/async.cpp
              ${PROJECT_SOURCE_DIR}/src/algorithm/leet_218_the_skyline_problem.cpp
              ${PROJECT_SOURCE_DIR}/src/algorithm/leet_15_3sum.cpp
   )
+
+if (MSVC)
+  list(APPEND TEST_SRC ${PROJECT_SOURCE_DIR}/src/win32/StackWalker.cpp)
+  list(APPEND TEST_SRC ${PROJECT_SOURCE_DIR}/src/win32/walker_test.cpp)
+  list(APPEND TEST_SRC ${PROJECT_SOURCE_DIR}/src/win32/wim_test.cpp)
+endif()
 
 ADD_EXECUTABLE(MainTest ${TEST_SRC})
 ###############################################################################

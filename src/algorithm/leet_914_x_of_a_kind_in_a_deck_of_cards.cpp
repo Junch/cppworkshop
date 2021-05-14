@@ -75,7 +75,7 @@ class Solution
             ++counts[card];
         }
 
-        int X = deck.size();
+        int X = (int)deck.size();
         for (const auto& p : counts)
         {
             X = gcd(X, p.second);

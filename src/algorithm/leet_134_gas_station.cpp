@@ -16,7 +16,7 @@ class Solution
   public:
     int canCompleteCircuit(vector<int> &gas, vector<int> &cost)
     {
-        int len = gas.size();
+        int len = (int)gas.size();
 
         for (int start = 0; start < len; ++start)
         {

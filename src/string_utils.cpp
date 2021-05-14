@@ -352,13 +352,13 @@ std::string WidestringToUTF8(const CStringW &wstr)
 CStringW UTF8ToWidestring(const std::string &s)
 {
     CStringW utf16String;
-    int size_needed = ::MultiByteToWideChar(CP_UTF8, 0, &s[0], s.length() + 1, NULL, 0);
+    int size_needed = ::MultiByteToWideChar(CP_UTF8, 0, &s[0], (int)s.length() + 1, NULL, 0);
     // The solution commented is also OK
     // std::unique_ptr<wchar_t[]> buf(new wchar_t[size_needed]);
     // ::MultiByteToWideChar(CP_UTF8, 0, &s[0], -1, buf.get(), size_needed);
     // return CStringW(buf.get());
 
-    ::MultiByteToWideChar(CP_UTF8, 0, &s[0], s.length() + 1, utf16String.GetBufferSetLength(size_needed), size_needed);
+    ::MultiByteToWideChar(CP_UTF8, 0, &s[0], (int)s.length() + 1, utf16String.GetBufferSetLength(size_needed), size_needed);
     return utf16String;
 }
 
