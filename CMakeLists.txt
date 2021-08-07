@@ -60,7 +60,7 @@ INCLUDE(ExternalProject)
 
 SET (install_dir ${CMAKE_BINARY_DIR}/3rd-party)
 INCLUDE_DIRECTORIES(${install_dir}/include)
-LINK_DIRECTORIES(${install_dir}/lib)
+LINK_DIRECTORIES(${install_dir}/lib ${install_dir}/lib64)
 
 ExternalProject_Add(third-party-gflags
   SOURCE_DIR        ${CMAKE_CURRENT_LIST_DIR}/3rd-party/gflags
@@ -68,6 +68,7 @@ ExternalProject_Add(third-party-gflags
   INSTALL_DIR       ${install_dir}
   CMAKE_ARGS        -DCMAKE_INSTALL_PREFIX:PATH=<INSTALL_DIR>
                     -DCMAKE_BUILD_TYPE=${CMAKE_BUILD_TYPE}
+                    -DBUILD_SHARED_LIBS=OFF
 )
 
 ExternalProject_Add( third-party-glog
@@ -76,6 +77,7 @@ ExternalProject_Add( third-party-glog
   INSTALL_DIR       ${install_dir}
   CMAKE_ARGS        -DCMAKE_INSTALL_PREFIX:PATH=<INSTALL_DIR>
                     -DCMAKE_BUILD_TYPE=${CMAKE_BUILD_TYPE}
+                    -DBUILD_SHARED_LIBS=OFF
   DEPENDS           third-party-gflags
 )
 
@@ -158,6 +160,7 @@ if (MSVC)
 else()
   TARGET_LINK_LIBRARIES(MainTest PRIVATE debug glogd optimized glog)
   TARGET_LINK_LIBRARIES(MainTest PRIVATE debug gflags_debug optimized gflags)
+  TARGET_LINK_LIBRARIES(MainTest PRIVATE uuid)
 endif()
 
 ADD_DEPENDENCIES(MainTest third-party-glog)
