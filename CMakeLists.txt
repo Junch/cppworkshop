@@ -62,6 +62,10 @@ SET (install_dir ${CMAKE_BINARY_DIR}/3rd-party)
 INCLUDE_DIRECTORIES(${install_dir}/include)
 LINK_DIRECTORIES(${install_dir}/lib)
 
+if(UNIX AND NOT APPLE)
+  LINK_DIRECTORIES(${install_dir}/lib64)
+endif()
+
 IF (APPLE)
   # brew install util-linux
   LINK_DIRECTORIES(/usr/local/Cellar/util-linux/2.37/lib)
