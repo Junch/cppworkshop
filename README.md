@@ -1,6 +1,6 @@
 # GoogleMock + gcov + Cmake example
 
-This repository contains an example of use of Cmake and [GoogleMock](https://code.google.com/p/googletest/downloads/detail?name=gmock-1.7.0.zip) for a C++ file.
+This repository contains an example of use of CMake and [GoogleMock](https://code.google.com/p/googletest/downloads/detail?name=gmock-1.7.0.zip) for a C++ file.
 It is mostly for personal use.
 
 ## Prerequisite
