@@ -60,7 +60,12 @@ INCLUDE(ExternalProject)
 
 SET (install_dir ${CMAKE_BINARY_DIR}/3rd-party)
 INCLUDE_DIRECTORIES(${install_dir}/include)
-LINK_DIRECTORIES(${install_dir}/lib ${install_dir}/lib64)
+LINK_DIRECTORIES(${install_dir}/lib)
+
+IF (APPLE)
+  # brew install util-linux
+  LINK_DIRECTORIES(/usr/local/Cellar/util-linux/2.37/lib)
+ENDIF()
 
 ExternalProject_Add(third-party-gflags
   SOURCE_DIR        ${CMAKE_CURRENT_LIST_DIR}/3rd-party/gflags
