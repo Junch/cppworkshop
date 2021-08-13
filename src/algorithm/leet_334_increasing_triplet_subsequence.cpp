@@ -1,5 +1,6 @@
 #include <gtest/gtest.h>
 #include <vector>
+#include <climits>
 
 using namespace std;
 
