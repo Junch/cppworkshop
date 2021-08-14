@@ -112,7 +112,7 @@ bool stringMatch(const std::string &searchString, const std::string &userName)
 
         matched = std::regex_match(userName, ex);
     }
-    catch (std::regex_error)
+    catch (const std::regex_error&)
     {
     }
 

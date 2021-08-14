@@ -45,9 +45,12 @@ TEST(valgrind, accessing_wrong_memory)
 
 TEST(valgrind, memory_leak)
 {
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wunused-but-set-variable"
     void *p = malloc(7);
     p = nullptr;
     // Should fail as 7 bytes are not freed.
+#pragma GCC diagnostic pop
 }
 
 } // namespace valgrind
