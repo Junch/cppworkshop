@@ -45,15 +45,19 @@ TEST(valgrind, accessing_wrong_memory)
 
 TEST(valgrind, memory_leak)
 {
-#if defined __GNUC__ and !defined __APPLE__
+#ifdef __GNUC__
+#ifndef __APPLE__
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wunused-but-set-variable"
+#endif
 #endif
     void *p = malloc(7);
     p = nullptr;
     // Should fail as 7 bytes are not freed.
-#if defined __GNUC__ and !defined __APPLE__
+#ifdef __GNUC__
+#ifndef __APPLE__
 #pragma GCC diagnostic pop
+#endif
 #endif
 }
 
