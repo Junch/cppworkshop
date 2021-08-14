@@ -35,7 +35,7 @@ INSTANTIATE_TEST_SUITE_P(leet, leet_218_test, ::testing::Values(
 ));
 // clang-format on
 
-TEST_P(leet_218_test, test)
+TEST_P(leet_218_test, DISABLED_test)
 {
     auto buildings = std::get<0>(GetParam());
     auto skyline = std::get<1>(GetParam());
