@@ -1,4 +1,6 @@
-# GoogleMock + gcov + Cmake example
+# GoogleMock + gcov + CMake example
+
+[![Build Status](http://junchenproxy.cloudapp.net:8080/buildStatus/icon?job=cppworkshop)](http://junchenproxy.cloudapp.net:8080/job/cppworkshop/)
 
 This repository contains an example of use of CMake and [GoogleMock](https://code.google.com/p/googletest/downloads/detail?name=gmock-1.7.0.zip) for a C++ file.
 It is mostly for personal use.
