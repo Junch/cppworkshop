@@ -19,8 +19,9 @@ namespace valgrind
 // Web: http://maintainablecode.logdown.com/posts/245425-valgrind-is-not-a-leak-checker
 ///////////////////////////////////////////////////////////////////////////////
 
-TEST(valgrind, use_uninitialized_values)
+TEST(valgrind, DISABLED_use_uninitialized_values)
 {
+// Debug version run on windows will cause exception
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wuninitialized"
     bool condition;
@@ -31,8 +32,10 @@ TEST(valgrind, use_uninitialized_values)
 #pragma GCC diagnostic pop
 }
 
-TEST(valgrind, accessing_wrong_memory)
+TEST(valgrind, DISABLED_accessing_wrong_memory)
 {
+// Debug version run on windows will cause exception
+// Assertion failed: vector subscript out of range
     std::vector<int> v{1, 2, 3, 4, 5};
     v[5] = 0;
 }

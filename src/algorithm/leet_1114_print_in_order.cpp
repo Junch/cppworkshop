@@ -69,7 +69,7 @@ class Foo
     std::mutex m1, m2;
 };
 
-TEST(leet_1114, 123)
+TEST(leet_1114, DISABLED_123)
 {
     Foo foo;
     std::thread t1(&Foo::first, &foo, printFirst);
@@ -82,7 +82,7 @@ TEST(leet_1114, 123)
     t3.join();
 }
 
-TEST(leet_1114, 132)
+TEST(leet_1114, DISABLED_132)
 {
     Foo foo;
     std::thread t1(&Foo::first, &foo, printFirst);
