@@ -128,6 +128,9 @@ SET(TEST_SRC ${PROJECT_SOURCE_DIR}/src/async.cpp
              ${PROJECT_SOURCE_DIR}/src/algorithm/leet_239_sliding_window_maximum.cpp
              ${PROJECT_SOURCE_DIR}/src/algorithm/leet_218_the_skyline_problem.cpp
              ${PROJECT_SOURCE_DIR}/src/algorithm/leet_15_3sum.cpp
+             ${PROJECT_SOURCE_DIR}/src/algorithm/leet_996.cpp
+             ${PROJECT_SOURCE_DIR}/src/algorithm/leet_212.cpp
+             ${PROJECT_SOURCE_DIR}/src/algorithm/leet_127.cpp
   )
 
 if (MSVC)
