@@ -131,6 +131,8 @@ SET(TEST_SRC ${PROJECT_SOURCE_DIR}/src/async.cpp
              ${PROJECT_SOURCE_DIR}/src/algorithm/leet_996.cpp
              ${PROJECT_SOURCE_DIR}/src/algorithm/leet_212.cpp
              ${PROJECT_SOURCE_DIR}/src/algorithm/leet_127.cpp
+             ${PROJECT_SOURCE_DIR}/src/algorithm/leet_698.cpp
+             ${PROJECT_SOURCE_DIR}/src/algorithm/leet_388.cpp
   )
 
 if (MSVC)

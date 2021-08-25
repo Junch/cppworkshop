@@ -47,6 +47,7 @@ class Foo
 
         // In visual studio there will be assert: unlock of unowned mutex
         // https://stackoverflow.com/questions/14202094/c11-thread-mutex-implementation-in-vs2012-assertion-fired
+        // https://zhuanlan.zhihu.com/p/260773684
         // An explanation: If the calling thread does not own the mutex, the behavior is undefined.
     }
 
