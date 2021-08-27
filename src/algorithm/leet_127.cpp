@@ -84,7 +84,7 @@ public:
                 q.pop();
                 for (int i = 0; i < l; i++) {                
                     char ch = w[i];
-                    for (int j = 'a'; j <= 'z'; j++) {
+                    for (char j = 'a'; j <= 'z'; j++) {
                         w[i] = j;
                         // Found the solution
                         if (w == endWord) return step + 1;

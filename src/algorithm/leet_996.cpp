@@ -43,7 +43,7 @@ public:
     }
     
     bool isPerfectSquare(int a, int b) {
-        int k = sqrt(a + b);
+        int k = static_cast<int>(sqrt(a + b));
         return k*k == a + b;
     }
 };
