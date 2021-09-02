@@ -77,7 +77,7 @@ class ThreadPool
             throw std::runtime_error("commit on ThreadPool is stopped");
         }
 
-        using RetType = typename std::result_of<F(Args...)>::type;
+        using RetType = typename std::invoke_result<F, Args...>::type;
         auto task = std::make_shared<std::packaged_task<RetType()>>(std::bind(std::forward<F>(f), std::forward<Args>(args)...));
         std::future<RetType> future = task->get_future();
         {

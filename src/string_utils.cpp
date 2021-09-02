@@ -388,7 +388,7 @@ TEST(string, DISABLED_CStringW_2_UTF8_FAIL)
     std::string temp = W2A(utf16str.GetBuffer());
 }
 
-TEST(string, UTF8_2_CStringW2)
+TEST(string, DISABLED_UTF8_2_CStringW2)
 {
     std::string utf8str{u8"李世民☹"};
     CString utf16str{L"李世民☹"};
@@ -404,6 +404,8 @@ TEST(string, CStringW_2_UTF8)
     CString utf16str{L"李世民☹"};
 
     std::string temp = WidestringToUTF8(utf16str);
+    ASSERT_EQ(utf8str.length(), 12);
+    ASSERT_EQ(utf16str.GetLength(), 4);
     ASSERT_STREQ(temp.c_str(), utf8str.c_str());
 }
 
