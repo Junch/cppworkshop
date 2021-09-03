@@ -92,7 +92,7 @@ ExternalProject_Add( third-party-glog
 
 #FILE(GLOB TEST_SRC ${PROJECT_SOURCE_DIR}/src/*.cpp)
 SET(TEST_SRC ${PROJECT_SOURCE_DIR}/src/async.cpp
-             ${PROJECT_SOURCE_DIR}/src/cpp_17.cpp
+             ${PROJECT_SOURCE_DIR}/src/struct_binding.cpp
              ${PROJECT_SOURCE_DIR}/src/function_lambda.cpp
              ${PROJECT_SOURCE_DIR}/src/function_signature.cpp
              ${PROJECT_SOURCE_DIR}/src/gflags_demo.cpp
@@ -115,6 +115,7 @@ SET(TEST_SRC ${PROJECT_SOURCE_DIR}/src/async.cpp
              ${PROJECT_SOURCE_DIR}/src/mock_test.cpp
              ${PROJECT_SOURCE_DIR}/src/random.cpp
              ${PROJECT_SOURCE_DIR}/src/bind_test.cpp
+             ${PROJECT_SOURCE_DIR}/src/vector_test.cpp
              ${PROJECT_SOURCE_DIR}/src/algorithm/treenode.cpp
              ${PROJECT_SOURCE_DIR}/src/algorithm/leet_1114_print_in_order.cpp
              ${PROJECT_SOURCE_DIR}/src/algorithm/leet_1114_print_in_order_2.cpp
