@@ -77,7 +77,7 @@ template <typename T, typename... Args>
 T *instance(Args &&... args)
 {
     return new T(std::forward<Args>(args)...);
-};
+}
 
 TEST(variadic, factory)
 {
