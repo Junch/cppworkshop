@@ -23,4 +23,4 @@ jobs:
     - name: Run test
       run: |
         MainTest --gtest_output=xml:output.xml
-      working-directory: ./temp
+      working-directory: /home/runner/work/cppworkshop/cppworkshop/build
