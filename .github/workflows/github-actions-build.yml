@@ -23,6 +23,14 @@ jobs:
     - name: Display the path
       run: pwd
       shell: bash
-    - name: Run test
-      run: ./build/MainTest --gtest_output=xml:output.xml
+    - name: Run tests
+      run: |
+        if [ "$RUNNER_OS" == "Linux" ]; then
+          ./build/MainTest --gtest_output=xml:output.xml
+        elif [ "$RUNNER_OS" == "Windows" ]; then
+          ./build/Release/MainTest.exe --gtest_output=xml:output.xml
+        else
+          echo "$RUNNER_OS not supported"
+          exit 1
+        fi
       shell: bash
