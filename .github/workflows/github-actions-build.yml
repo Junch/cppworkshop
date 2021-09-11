@@ -11,7 +11,7 @@ jobs:
 
     strategy:
       matrix:
-        os: [ubuntu-latest, windows-latest]
+        os: [ubuntu-latest, windows-latest, macos-latest]
 
     steps:
     - name: Checkout
@@ -20,12 +20,11 @@ jobs:
       uses: nicledomaS/cmake_build_action@v1.4
       with:
         submodule_update: ON
-    - name: Display the path
-      run: pwd
-      shell: bash
     - name: Run tests
       run: |
         if [ "$RUNNER_OS" == "Linux" ]; then
+          ./build/MainTest --gtest_output=xml:output.xml
+        elif [ "$RUNNER_OS" == "macOS" ]; then
           ./build/MainTest --gtest_output=xml:output.xml
         elif [ "$RUNNER_OS" == "Windows" ]; then
           ./build/Release/MainTest.exe --gtest_output=xml:output.xml

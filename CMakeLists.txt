@@ -66,11 +66,6 @@ if(UNIX AND NOT APPLE)
   LINK_DIRECTORIES(${install_dir}/lib64)
 endif()
 
-IF (APPLE)
-  # brew install util-linux
-  LINK_DIRECTORIES(/usr/local/Cellar/util-linux/2.37/lib)
-ENDIF()
-
 ExternalProject_Add(third-party-gflags
   SOURCE_DIR        ${CMAKE_CURRENT_LIST_DIR}/3rd-party/gflags
   PREFIX            ${CMAKE_BINARY_DIR}/gflags
@@ -176,7 +171,6 @@ if (MSVC)
 else()
   TARGET_LINK_LIBRARIES(MainTest PRIVATE debug glogd optimized glog)
   TARGET_LINK_LIBRARIES(MainTest PRIVATE debug gflags_debug optimized gflags)
-  TARGET_LINK_LIBRARIES(MainTest PRIVATE uuid)
 endif()
 
 ADD_DEPENDENCIES(MainTest third-party-glog)
