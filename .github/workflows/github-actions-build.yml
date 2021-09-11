@@ -21,5 +21,7 @@ jobs:
       with:
         submodule_update: ON
     - name: Run test
+      working-directory: ../cppworkshop/cppworkshop/build
       run: |
-        /home/runner/work/cppworkshop/cppworkshop/build/MainTest --gtest_output=xml:output.xml
+        pwd
+        MainTest --gtest_output=xml:output.xml
