@@ -22,5 +22,4 @@ jobs:
         submodule_update: ON
     - name: Run test
       run: |
-        MainTest --gtest_output=xml:output.xml
-      working-directory: /home/runner/work/cppworkshop/cppworkshop/build
+        /home/runner/work/cppworkshop/cppworkshop/build/MainTest --gtest_output=xml:output.xml
