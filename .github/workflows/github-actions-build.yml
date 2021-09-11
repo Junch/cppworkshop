@@ -20,3 +20,6 @@ jobs:
       uses: nicledomaS/cmake_build_action@v1.4
       with:
         submodule_update: ON
+    - name: Run test
+      run: |
+        MainTest --gtest_output=xml:output.xml
