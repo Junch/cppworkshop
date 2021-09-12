@@ -48,6 +48,6 @@ TEST(leet_388, test)
     string input = "dir\n\tsubdir1\n\tsubdir2\n\t\tfile.ext";
     Solution sln;
     int len = sln.lengthLongestPath(input);
-    ASSERT_EQ(len, 20);
+    ASSERT_EQ(len, 19);
 }
 } // namespace leet_388
