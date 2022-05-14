@@ -70,7 +70,7 @@ class leet_1114_test2 : public testing::TestWithParam<std::array<int, 3>>
 };
 
 INSTANTIATE_TEST_SUITE_P(leet, leet_1114_test2,
-                         ::testing::Values(std::array{1, 2, 3}, std::array{3, 1, 2}, std::array{3, 2, 1}));
+                         ::testing::Values(std::array<int,3>{1, 2, 3}, std::array<int,3>{3, 1, 2}, std::array<int,3>{3, 2, 1}));
 
 TEST_P(leet_1114_test2, print_in_order)
 {
@@ -145,7 +145,7 @@ class leet_1114_test3 : public testing::TestWithParam<std::array<int, 3>>
 };
 
 INSTANTIATE_TEST_SUITE_P(leet, leet_1114_test3,
-                         ::testing::Values(std::array{1, 2, 3}, std::array{3, 1, 2}, std::array{3, 2, 1}));
+                         ::testing::Values(std::array<int,3>{1, 2, 3}, std::array<int, 3>{3, 1, 2}, std::array<int, 3>{3, 2, 1}));
 
 TEST_P(leet_1114_test3, DISABLED_print_in_order)
 {
@@ -228,7 +228,7 @@ class leet_1114_test4 : public testing::TestWithParam<std::array<int, 3>>
 };
 
 INSTANTIATE_TEST_SUITE_P(leet, leet_1114_test4,
-                         ::testing::Values(std::array{1, 2, 3}, std::array{3, 1, 2}, std::array{3, 2, 1}));
+                         ::testing::Values(std::array<int, 3>{1, 2, 3}, std::array<int, 3>{3, 1, 2}, std::array<int, 3>{3, 2, 1}));
 
 TEST_P(leet_1114_test4, print_in_order)
 {

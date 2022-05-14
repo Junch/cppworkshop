@@ -1,6 +1,8 @@
 #include <gtest/gtest.h>
 #include <tuple>
 
+#if defined(__GNUC__) || (defined(_MSC_VER) && (_MSC_VER >= 1910))
+
 namespace cpp_17
 {
 
@@ -33,3 +35,5 @@ TEST(structural_bindings, loop)
 }
 
 } // namespace cpp_17
+
+#endif

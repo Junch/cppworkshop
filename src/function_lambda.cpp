@@ -113,6 +113,8 @@ TEST(lambda, copy)
 // Book: C++17 - the complete guide
 ///////////////////////////////////////////////////////////////////////////////
 
+#if defined(__GNUC__) || (defined(_MSC_VER) && (_MSC_VER >= 1910))
+
 class Data
 {
   private:
@@ -149,5 +151,7 @@ TEST(lambda, copy_this)
     } // d is no longer valid
     t.join();
 }
+
+#endif
 
 } // namespace function_lambda

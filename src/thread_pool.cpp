@@ -1,7 +1,9 @@
-#include <future>
+﻿#include <future>
 #include <gtest/gtest.h>
 #include <queue>
 #include <thread>
+
+#if defined(__GNUC__) || (defined(_MSC_VER) && (_MSC_VER >= 1910))
 
 namespace thread_pool
 {
@@ -133,3 +135,5 @@ TEST(threadpool, idlCount)
 }
 
 } // namespace thread_pool
+
+#endif

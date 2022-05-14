@@ -32,7 +32,7 @@ class ZeroEvenOdd
     {
         while (true)
         {
-            std::unique_lock lock(_mutex);
+            std::unique_lock<std::mutex> lock(_mutex);
             _cv.wait(lock, [this] { return flag == 0; });
 
             ++number;
@@ -62,7 +62,7 @@ class ZeroEvenOdd
     {
         while (true)
         {
-            std::unique_lock lock(_mutex);
+            std::unique_lock<std::mutex> lock(_mutex);
             _cv.wait(lock, [this] { return flag == 2 || bExit; });
 
             if (bExit)
@@ -83,7 +83,7 @@ class ZeroEvenOdd
     {
         while (true)
         {
-            std::unique_lock lock(_mutex);
+            std::unique_lock<std::mutex> lock(_mutex);
             _cv.wait(lock, [this] { return flag == 1 || bExit; });
 
             if (bExit)

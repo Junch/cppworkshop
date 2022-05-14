@@ -29,7 +29,7 @@ class H2O
 
     void hydrogen(function<void()> releaseHydrogen)
     {
-        std::unique_lock lock(_mutex);
+        std::unique_lock<std::mutex> lock(_mutex);
         _cv.wait(lock, [this] { return _hydrogen_count < 2; });
 
         // releaseHydrogen() outputs "H". Do not change or remove this line.
@@ -40,7 +40,7 @@ class H2O
 
     void oxygen(function<void()> releaseOxygen)
     {
-        std::unique_lock lock(_mutex);
+        std::unique_lock<std::mutex> lock(_mutex);
         _cv.wait(lock, [this] { return _hydrogen_count == 2; });
 
         // releaseOxygen() outputs "O". Do not change or remove this line.

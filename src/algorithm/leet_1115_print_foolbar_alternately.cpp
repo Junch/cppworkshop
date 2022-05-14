@@ -35,7 +35,7 @@ class FooBar
     {
         for (int i = 0; i < n; i++)
         {
-            std::unique_lock lock(_mutex);
+            std::unique_lock<std::mutex> lock(_mutex);
             // while (foo_printed)
             // {
             //     _cv.wait(lock);
@@ -58,7 +58,7 @@ class FooBar
     {
         for (int i = 0; i < n; i++)
         {
-            std::unique_lock lock(_mutex);
+            std::unique_lock<std::mutex> lock(_mutex);
             // while (!foo_printed)
             // {
             //     _cv.wait(lock);

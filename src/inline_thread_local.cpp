@@ -36,6 +36,8 @@ TEST(thread_local, test)
     t4.join();
 }
 
+#if defined(__GNUC__) || (defined(_MSC_VER) && (_MSC_VER >= 1910))
+
 ///////////////////////////////////////////////////////////////////////////////
 // No. 1
 // Title: Inline Variable
@@ -81,3 +83,5 @@ TEST(inline_thread_local, test)
     t.join();
     myThreadData.print("main() end:");
 }
+
+#endif
