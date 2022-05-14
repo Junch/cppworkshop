@@ -11,7 +11,7 @@ SET(CMAKE_CONFIGURATION_TYPES Debug Release)
 # https://arne-mertz.de/2018/07/cmake-properties-options/
 if (MSVC)
   # warning level 4 and all warnings as errors
-  add_compile_options(/W4 /WX)
+  add_compile_options(/W4 /WX /MP)
   add_compile_options(/D_CRTDBG_MAP_ALLOC)
   set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /wd4100 /wd4740 /wd4267") # glog introduce a warning
   # make the Release version create a PDB
