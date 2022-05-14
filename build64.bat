@@ -4,5 +4,5 @@
 pushd _build64 >nul
 cmake -A x64 ..
 REM cmake --build . --config Debug
-cmake --build . --config Release -- /verbosity:detailed
+cmake --build . --config Release
 popd >nul

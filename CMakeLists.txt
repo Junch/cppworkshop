@@ -1,10 +1,12 @@
 cmake_minimum_required(VERSION 3.1.0 FATAL_ERROR)
-PROJECT(Test VERSION 1.0.0 LANGUAGES CXX)
+PROJECT(MainTest VERSION 1.0.0 LANGUAGES CXX)
 
 OPTION(sanitize "Built with the sanitize support." OFF)
 OPTION(coverage "Built with the gCov/lcov support." OFF)
 
 SET(CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR}/CMakeModules ${CMAKE_MODULE_PATH})
+
+SET(CMAKE_CONFIGURATION_TYPES Debug Release)
 
 # https://arne-mertz.de/2018/07/cmake-properties-options/
 if (MSVC)
@@ -85,60 +87,24 @@ ExternalProject_Add( third-party-glog
   DEPENDS           third-party-gflags
 )
 
-#FILE(GLOB TEST_SRC ${PROJECT_SOURCE_DIR}/src/*.cpp)
-SET(TEST_SRC ${PROJECT_SOURCE_DIR}/src/async.cpp
-             ${PROJECT_SOURCE_DIR}/src/struct_binding.cpp
-             ${PROJECT_SOURCE_DIR}/src/function_lambda.cpp
-             ${PROJECT_SOURCE_DIR}/src/function_signature.cpp
-             ${PROJECT_SOURCE_DIR}/src/gflags_demo.cpp
-             ${PROJECT_SOURCE_DIR}/src/glog_demo.cpp
-             ${PROJECT_SOURCE_DIR}/src/inline_thread_local.cpp
-             ${PROJECT_SOURCE_DIR}/src/main.cpp
-             ${PROJECT_SOURCE_DIR}/src/map_test.cpp
-             ${PROJECT_SOURCE_DIR}/src/method_chaining.cpp
-             ${PROJECT_SOURCE_DIR}/src/optional.cpp
-             ${PROJECT_SOURCE_DIR}/src/packaged_task.cpp
-             ${PROJECT_SOURCE_DIR}/src/promise.cpp
-             ${PROJECT_SOURCE_DIR}/src/shared_ptr.cpp
-             ${PROJECT_SOURCE_DIR}/src/string_utils.cpp
-             ${PROJECT_SOURCE_DIR}/src/stringftime.cpp
-             ${PROJECT_SOURCE_DIR}/src/thread_pool.cpp
-             ${PROJECT_SOURCE_DIR}/src/valgrind.cpp
-             ${PROJECT_SOURCE_DIR}/src/variadic_template.cpp
-             ${PROJECT_SOURCE_DIR}/src/condition_variable.cpp
-             ${PROJECT_SOURCE_DIR}/src/hash_test.cpp
-             ${PROJECT_SOURCE_DIR}/src/mock_test.cpp
-             ${PROJECT_SOURCE_DIR}/src/random.cpp
-             ${PROJECT_SOURCE_DIR}/src/bind_test.cpp
-             ${PROJECT_SOURCE_DIR}/src/vector_test.cpp
-             ${PROJECT_SOURCE_DIR}/src/algorithm/treenode.cpp
-             ${PROJECT_SOURCE_DIR}/src/algorithm/leet_1114_print_in_order.cpp
-             ${PROJECT_SOURCE_DIR}/src/algorithm/leet_1114_print_in_order_2.cpp
-             ${PROJECT_SOURCE_DIR}/src/algorithm/leet_1115_print_foolbar_alternately.cpp
-             ${PROJECT_SOURCE_DIR}/src/algorithm/leet_1116_print_zero_even_odd.cpp
-             ${PROJECT_SOURCE_DIR}/src/algorithm/leet_1117_building_h2o.cpp
-             ${PROJECT_SOURCE_DIR}/src/algorithm/leet_654_maximum_binary_tree.cpp
-             ${PROJECT_SOURCE_DIR}/src/algorithm/leet_914_x_of_a_kind_in_a_deck_of_cards.cpp
-             ${PROJECT_SOURCE_DIR}/src/algorithm/leet_350_intersection_of_two_arrays_ii.cpp
-             ${PROJECT_SOURCE_DIR}/src/algorithm/leet_134_gas_station.cpp
-             ${PROJECT_SOURCE_DIR}/src/algorithm/leet_334_increasing_triplet_subsequence.cpp
-             ${PROJECT_SOURCE_DIR}/src/algorithm/leet_239_sliding_window_maximum.cpp
-             ${PROJECT_SOURCE_DIR}/src/algorithm/leet_218_the_skyline_problem.cpp
-             ${PROJECT_SOURCE_DIR}/src/algorithm/leet_15_3sum.cpp
-             ${PROJECT_SOURCE_DIR}/src/algorithm/leet_996.cpp
-             ${PROJECT_SOURCE_DIR}/src/algorithm/leet_212.cpp
-             ${PROJECT_SOURCE_DIR}/src/algorithm/leet_127.cpp
-             ${PROJECT_SOURCE_DIR}/src/algorithm/leet_698.cpp
-             ${PROJECT_SOURCE_DIR}/src/algorithm/leet_388.cpp
-  )
+INCLUDE_DIRECTORIES(${PROJECT_SOURCE_DIR}/src)
+FILE(GLOB TEST_SRC ${PROJECT_SOURCE_DIR}/src/*.*)
+SOURCE_GROUP("src" FILES ${TEST_SRC})
 
-if (MSVC)
-  list(APPEND TEST_SRC ${PROJECT_SOURCE_DIR}/src/win32/StackWalker.cpp)
-  list(APPEND TEST_SRC ${PROJECT_SOURCE_DIR}/src/win32/walker_test.cpp)
-  list(APPEND TEST_SRC ${PROJECT_SOURCE_DIR}/src/win32/wim_test.cpp)
-endif()
+FILE(GLOB TEST_ALGORITHM_SRC ${PROJECT_SOURCE_DIR}/src/algorithm/*.*)
+SOURCE_GROUP("src\\algorithm" FILES ${TEST_ALGORITHM_SRC})
 
-ADD_EXECUTABLE(MainTest ${TEST_SRC})
+IF (MSVC)
+  # list(APPEND TEST_SRC ${PROJECT_SOURCE_DIR}/src/win32/StackWalker.cpp)
+  # list(APPEND TEST_SRC ${PROJECT_SOURCE_DIR}/src/win32/walker_test.cpp)
+  # list(APPEND TEST_SRC ${PROJECT_SOURCE_DIR}/src/win32/wim_test.cpp)
+  FILE(GLOB TEST_WIN32_SRC ${PROJECT_SOURCE_DIR}/src/win32/*.*)
+  SOURCE_GROUP("src\\win32" FILES ${TEST_WIN32_SRC})
+ENDIF()
+
+SET (SOURCE_FILES ${TEST_SRC} ${TEST_ALGORITHM_SRC} ${TEST_WIN32_SRC})
+
+ADD_EXECUTABLE(MainTest ${SOURCE_FILES})
 ###############################################################################
 # Title: Enabling C++11 And Later In CMake
 # Web: https://crascit.com/2015/03/28/enabling-cxx11-in-cmake
@@ -174,6 +140,8 @@ else()
 endif()
 
 ADD_DEPENDENCIES(MainTest third-party-glog)
+
+SET_PROPERTY(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR} PROPERTY VS_STARTUP_PROJECT MainTest)
 
 # Code Coverage
 IF (coverage)
