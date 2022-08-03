@@ -12,6 +12,8 @@ public:
     Circle(double radius) :radius_(radius)
     {}
 
+    double getRadius() const { return radius_; }
+
 private:
     double radius_;
 };
@@ -22,18 +24,20 @@ public:
     Square(double sideLength) :sideLength_(sideLength)
     {}
 
+    double getSideLength() const { return sideLength_; }
+
 private:
     double sideLength_;
 };
 
 void drawAlone(const Circle& circle)
 {
-    printf("draw a circle\n");
+    printf("draw a circle, radius: %.1f\n", circle.getRadius());
 }
 
 void drawAlone(const Square& square)
 {
-    printf("draw a square\n");
+    printf("draw a square, side length: %.1f\n", square.getSideLength());
 }
 
 void serializeAlone(const Circle& circle)
