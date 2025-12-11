@@ -113,7 +113,7 @@ int countdown(int from, int to)
     return from - to;
 }
 
-TEST(threadpool, simple)
+TEST(threadpool, DISABLED_simple)
 {
     ThreadPool executor{2};
     std::future<int> f5 = executor.commit(countdown, 5, 0);

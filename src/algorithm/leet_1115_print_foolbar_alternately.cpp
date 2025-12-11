@@ -4,6 +4,7 @@
 #include <iostream>
 #include <mutex>
 #include <thread>
+#include <chrono>
 
 using namespace std;
 
@@ -88,7 +89,7 @@ TEST_P(leet_1115_test, foobar)
 {
     FooBar foobar(GetParam());
     std::thread t1(&FooBar::foo, &foobar, printFoo);
-    std::this_thread::sleep_for(100ms);
+    std::this_thread::sleep_for(std::chrono::milliseconds(100));
     std::thread t2(&FooBar::bar, &foobar, printBar);
     t1.join();
     t2.join();

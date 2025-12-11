@@ -3,6 +3,7 @@
 #include <gtest/gtest.h>
 #include <mutex>
 #include <thread>
+#include <chrono>
 
 using namespace std;
 
@@ -114,9 +115,9 @@ TEST_P(leet_1116_test, zero_even_odd)
 {
     ZeroEvenOdd obj(GetParam());
     std::thread t1(&ZeroEvenOdd::zero, &obj, printNumber);
-    std::this_thread::sleep_for(100ms);
+    std::this_thread::sleep_for(std::chrono::milliseconds(100));
     std::thread t2(&ZeroEvenOdd::even, &obj, printNumber);
-    std::this_thread::sleep_for(100ms);
+    std::this_thread::sleep_for(std::chrono::milliseconds(100));
     std::thread t3(&ZeroEvenOdd::odd, &obj, printNumber);
 
     t1.join();

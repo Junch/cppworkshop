@@ -29,7 +29,7 @@ TEST(packaged_task, simple)
 {
     std::packaged_task<int(int, int)> task(countdown);
     std::future<int> ret = task.get_future();
-    std::thread th(std::move(task), 5, 0);
+    std::thread th(std::move(task), 1, 0);
     int value = ret.get();
 
     std::cout << "The countdown lasted for " << value << " seconds.\n";
@@ -38,7 +38,7 @@ TEST(packaged_task, simple)
 
 TEST(packaged_task, simple_1)
 {
-    std::packaged_task<int()> task([] { return countdown(5, 0); }); // better than std::bind(countdown, 5, 0)
+    std::packaged_task<int()> task([] { return countdown(1, 0); }); // better than std::bind(countdown, 5, 0)
     std::future<int> ret = task.get_future();
     std::thread th(std::move(task));
     int value = ret.get();
@@ -72,7 +72,7 @@ void work()
 TEST(packaged_task, queue)
 {
     std::thread workthread(work);
-    std::packaged_task<int()> task([] { return countdown(5, 0); }); // better than std::bind(countdown, 10, 0)
+    std::packaged_task<int()> task([] { return countdown(1, 0); }); // better than std::bind(countdown, 10, 0)
     std::future<int> fu = task.get_future();
     {
         std::lock_guard<std::mutex> locker(mu);

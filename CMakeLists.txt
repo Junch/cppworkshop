@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.1.0 FATAL_ERROR)
+cmake_minimum_required(VERSION 3.5.0)
 PROJECT(MainTest VERSION 1.0.0 LANGUAGES CXX)
 
 OPTION(sanitize "Built with the sanitize support." OFF)
@@ -13,7 +13,7 @@ if (MSVC)
   # warning level 4 and all warnings as errors
   add_compile_options(/W4 /WX /MP)
   add_compile_options(/D_CRTDBG_MAP_ALLOC)
-  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /wd4100 /wd4740 /wd4267") # glog introduce a warning
+  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /wd4100 /wd4740 /wd4267 /wd4244") # glog introduce a warning
   # make the Release version create a PDB
   SET(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} /Zi")
   # # minimize the size or the resulting EXE
@@ -116,6 +116,7 @@ SET_TARGET_PROPERTIES(MainTest PROPERTIES
 )
 
 TARGET_COMPILE_DEFINITIONS(MainTest PRIVATE GLOG_NO_ABBREVIATED_SEVERITIES)
+TARGET_COMPILE_DEFINITIONS(MainTest PRIVATE GLOG_STATIC_DEFINE)
 TARGET_LINK_LIBRARIES(MainTest PRIVATE gtest gmock)
 TARGET_LINK_LIBRARIES(MainTest PRIVATE ${CMAKE_THREAD_LIBS_INIT})
 
@@ -131,7 +132,10 @@ if (MSVC)
   # https://gitlab.kitware.com/cmake/cmake/issues/17645
   #############################################################################
   TARGET_COMPILE_DEFINITIONS(MainTest PUBLIC -DGOOGLE_GLOG_DLL_DECL=)
+  TARGET_COMPILE_DEFINITIONS(MainTest PRIVATE GLOG_USE_GLOG_EXPORT)
+  TARGET_COMPILE_DEFINITIONS(MainTest PRIVATE GLOG_STATIC_DEFINE)
   TARGET_LINK_LIBRARIES(MainTest PRIVATE shlwapi.lib)
+  TARGET_LINK_LIBRARIES(MainTest PRIVATE DbgHelp.lib)
   TARGET_LINK_LIBRARIES(MainTest PRIVATE $<IF:$<CONFIG:Debug>,gflags_static_debug.lib,gflags_static.lib>)
   TARGET_LINK_LIBRARIES(MainTest PRIVATE $<IF:$<CONFIG:Debug>,glogd.lib,glog.lib>)
   TARGET_COMPILE_DEFINITIONS(MainTest PRIVATE UNICODE _UNICODE)

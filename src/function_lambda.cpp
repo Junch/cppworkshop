@@ -1,4 +1,5 @@
 #include <array>
+#include <chrono>
 #include <functional>
 #include <gtest/gtest.h>
 #include <iostream>

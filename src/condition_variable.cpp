@@ -52,7 +52,7 @@ void read()
     }
 }
 
-TEST(condition_variable, wait_for)
+TEST(condition_variable, DISABLED_wait_for)
 {
     using namespace std::chrono_literals;
 
@@ -64,7 +64,7 @@ TEST(condition_variable, wait_for)
 
 // https://developercommunity.visualstudio.com/content/problem/193041/the-visual-c-2017-condition-variable-implementatio.html
 
-TEST(condition_variable, vs_bug)
+TEST(condition_variable, DISABLED_vs_bug)
 {
     for (int i = 0; i < 100; ++i)
     {

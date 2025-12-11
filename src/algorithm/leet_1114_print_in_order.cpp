@@ -3,6 +3,7 @@
 #include <iostream>
 #include <mutex>
 #include <thread>
+#include <chrono>
 using namespace std;
 using namespace std::literals;
 
@@ -74,9 +75,9 @@ TEST(leet_1114, DISABLED_123)
 {
     Foo foo;
     std::thread t1(&Foo::first, &foo, printFirst);
-    std::this_thread::sleep_for(100ms);
+    std::this_thread::sleep_for(std::chrono::milliseconds(100));
     std::thread t2(&Foo::second, &foo, printSecond);
-    std::this_thread::sleep_for(100ms);
+    std::this_thread::sleep_for(std::chrono::milliseconds(100));
     std::thread t3(&Foo::third, &foo, printThird);
     t1.join();
     t2.join();
@@ -87,9 +88,9 @@ TEST(leet_1114, DISABLED_132)
 {
     Foo foo;
     std::thread t1(&Foo::first, &foo, printFirst);
-    std::this_thread::sleep_for(100ms);
+    std::this_thread::sleep_for(std::chrono::milliseconds(100));
     std::thread t2(&Foo::third, &foo, printThird);
-    std::this_thread::sleep_for(100ms);
+    std::this_thread::sleep_for(std::chrono::milliseconds(100));
     std::thread t3(&Foo::second, &foo, printSecond);
     t1.join();
     t2.join();
