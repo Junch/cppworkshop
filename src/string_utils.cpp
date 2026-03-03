@@ -9,8 +9,6 @@
 #include <Windows.h>
 #include <atlstr.h>
 #pragma comment(lib, "Rpcrt4")
-#else
-#include <uuid/uuid.h>
 #endif
 
 namespace string_utils

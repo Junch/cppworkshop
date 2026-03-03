@@ -127,7 +127,8 @@ class Data
     void foo()
     {
         [[maybe_unused]] auto l1 = [this] { std::cout << name << '\n'; };
-        [[maybe_unused]] auto l2 = [=] { std::cout << name << '\n'; };
+        // C++20 需要显示捕获 this
+        [[maybe_unused]] auto l2 = [=, this] { std::cout << name << '\n'; };
         [[maybe_unused]] auto l3 = [&] { std::cout << name << '\n'; };
     }
 
