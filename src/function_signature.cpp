@@ -25,7 +25,7 @@ class Signal<R(Args...)>
   public:
     using F = R (*)(Args...);
 
-    Signal<R(Args...)>(F f) : func_(f) {}
+        Signal(F f) : func_(f) {}
 
     R operator()(Args... args) { return func_(std::forward<Args>(args)...); }
 
@@ -81,7 +81,7 @@ class Signal2<R(Args...)>
     Signal2() : invoke_f_(nullptr), destroy_f_(nullptr), data_ptr_(nullptr), data_size_(0) {}
 
     template <typename Functor>
-    Signal2<R(Args...)>(Functor f)
+        Signal2(Functor f)
         // specialize functions and erase their type info by casting
         : invoke_f_(reinterpret_cast<invoke_fn_t>(invokeFn<Functor>)),
           destroy_f_(reinterpret_cast<destroy_fn_t>(destroyFn<Functor>)), data_ptr_(new char[sizeof(Functor)]),
