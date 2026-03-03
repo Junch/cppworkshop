@@ -68,25 +68,6 @@ if(UNIX AND NOT APPLE)
   LINK_DIRECTORIES(${install_dir}/lib64)
 endif()
 
-ExternalProject_Add(third-party-gflags
-  SOURCE_DIR        ${CMAKE_CURRENT_LIST_DIR}/3rd-party/gflags
-  PREFIX            ${CMAKE_BINARY_DIR}/gflags
-  INSTALL_DIR       ${install_dir}
-  CMAKE_ARGS        -DCMAKE_INSTALL_PREFIX:PATH=<INSTALL_DIR>
-                    -DCMAKE_BUILD_TYPE=${CMAKE_BUILD_TYPE}
-                    -DBUILD_SHARED_LIBS=OFF
-)
-
-ExternalProject_Add( third-party-glog
-  SOURCE_DIR        ${CMAKE_CURRENT_SOURCE_DIR}/3rd-party/glog
-  PREFIX            ${CMAKE_BINARY_DIR}/glog
-  INSTALL_DIR       ${install_dir}
-  CMAKE_ARGS        -DCMAKE_INSTALL_PREFIX:PATH=<INSTALL_DIR>
-                    -DCMAKE_BUILD_TYPE=${CMAKE_BUILD_TYPE}
-                    -DBUILD_SHARED_LIBS=OFF
-  DEPENDS           third-party-gflags
-)
-
 INCLUDE_DIRECTORIES(${PROJECT_SOURCE_DIR}/src)
 FILE(GLOB TEST_SRC ${PROJECT_SOURCE_DIR}/src/*.*)
 SOURCE_GROUP("src" FILES ${TEST_SRC})
@@ -115,8 +96,6 @@ SET_TARGET_PROPERTIES(MainTest PROPERTIES
   CXX_EXTENSIONS NO
 )
 
-TARGET_COMPILE_DEFINITIONS(MainTest PRIVATE GLOG_NO_ABBREVIATED_SEVERITIES)
-TARGET_COMPILE_DEFINITIONS(MainTest PRIVATE GLOG_STATIC_DEFINE)
 TARGET_LINK_LIBRARIES(MainTest PRIVATE gtest gmock)
 TARGET_LINK_LIBRARIES(MainTest PRIVATE ${CMAKE_THREAD_LIBS_INIT})
 
@@ -131,20 +110,11 @@ if (MSVC)
   # https://github.com/Microsoft/vcpkg/issues/4606
   # https://gitlab.kitware.com/cmake/cmake/issues/17645
   #############################################################################
-  TARGET_COMPILE_DEFINITIONS(MainTest PUBLIC -DGOOGLE_GLOG_DLL_DECL=)
-  TARGET_COMPILE_DEFINITIONS(MainTest PRIVATE GLOG_USE_GLOG_EXPORT)
-  TARGET_COMPILE_DEFINITIONS(MainTest PRIVATE GLOG_STATIC_DEFINE)
   TARGET_LINK_LIBRARIES(MainTest PRIVATE shlwapi.lib)
   TARGET_LINK_LIBRARIES(MainTest PRIVATE DbgHelp.lib)
-  TARGET_LINK_LIBRARIES(MainTest PRIVATE $<IF:$<CONFIG:Debug>,gflags_static_debug.lib,gflags_static.lib>)
-  TARGET_LINK_LIBRARIES(MainTest PRIVATE $<IF:$<CONFIG:Debug>,glogd.lib,glog.lib>)
   TARGET_COMPILE_DEFINITIONS(MainTest PRIVATE UNICODE _UNICODE)
 else()
-  TARGET_LINK_LIBRARIES(MainTest PRIVATE debug glogd optimized glog)
-  TARGET_LINK_LIBRARIES(MainTest PRIVATE debug gflags_debug optimized gflags)
 endif()
-
-ADD_DEPENDENCIES(MainTest third-party-glog)
 
 SET_PROPERTY(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR} PROPERTY VS_STARTUP_PROJECT MainTest)
 
